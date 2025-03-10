@@ -9,8 +9,12 @@ lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.1"
 composeBom = "2025.02.00"
 uiTextGoogleFont = "1.7.8"
+navigationCompose = "2.8.8"
 
 [libraries]
+
+androidx-navigation-compose = {module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose"}
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx" }
 androidx-ui-text-google-fonts = {group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "uiTextGoogleFont"}
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

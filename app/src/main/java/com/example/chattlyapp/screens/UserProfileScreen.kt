@@ -49,10 +49,10 @@ fun MainScreenRegUser(modifier: Modifier = Modifier){
             .padding(top = 42.dp)
             .background(MaterialTheme.colorScheme.background)
     ) {
-        firstName = CustomInput(label = "Föramn", icon = Icons.Default.Person) ?: "Inget värde"
-        lastName = CustomInput(label = "Efternamn", icon = Icons.Default.Face) ?: "Inget värde"
-        nickName = CustomInput(label = "Nickname", icon = Icons.Default.Person) ?: "Inget värde"
-        eMail = CustomInput(label = "E-post", icon = Icons.Default.Email) ?: "Inget värde"
+        firstName = CustomInput(label = "Föramn", icon = Icons.Default.Person)
+        lastName = CustomInput(label = "Efternamn", icon = Icons.Default.Face)
+        nickName = CustomInput(label = "Nickname", icon = Icons.Default.Person)
+        eMail = CustomInput(label = "E-post", icon = Icons.Default.Email)
         password = CustomInput(label = "Lösenord", icon = Icons.Default.Lock)
 
 
