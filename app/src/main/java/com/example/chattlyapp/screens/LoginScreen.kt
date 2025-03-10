@@ -1,15 +1,11 @@
 package com.example.chattlyapp.screens
 
-import android.annotation.SuppressLint
-import androidx.compose.foundation.Image
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-//import androidx.compose.foundation.layout.BoxScopeInstance.align
 import androidx.compose.foundation.layout.Column
-//import androidx.compose.foundation.layout.FlowRowScopeInstance.alignByBaseline
-//import androidx.compose.foundation.layout.FlowRowScopeInstance.align
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -21,10 +17,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text.input.InputTransformation.Companion.keyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonElevation
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
@@ -33,42 +25,30 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.layout.FirstBaseline
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.chattlyapp.ChattlyAppTheme
 import com.example.chattlyapp.R
-import kotlin.math.round
+import com.example.chattlyapp.viewmodel.LoginScreenViewModel
+
 
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier) {
+fun LoginScreen(modifier: Modifier = Modifier,
+                viewModel: LoginScreenViewModel = viewModel()) {
 
     Column(
         Modifier
@@ -130,8 +110,13 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 
                 Spacer(Modifier.size(32.dp))
 
+                val context = LocalContext.current
+
                 ElevatedButton(
-                    onClick = {/*TODO */},
+                    onClick = {
+                        Log.d("!!!", viewModel.password + viewModel.userName + viewModel.remainLoginIn )
+                        viewModel.customToast("meddlande",context)
+                    }, //TODO remove test only
                     Modifier.fillMaxWidth())
                 {
                     Text(text = "Logga in")
@@ -145,13 +130,14 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun RemberMeNewPassword() {
+fun RemberMeNewPassword(viewModel: LoginScreenViewModel = viewModel()) {
 
-    var checkedState by remember { mutableStateOf(true) }
+
+   // var checkedState by remember { mutableStateOf(true) }    Körs i viewmodel
 
     Row(modifier = Modifier, horizontalArrangement = Arrangement.Start,
     verticalAlignment = Alignment.CenterVertically) {
-    Checkbox(checked = checkedState, onCheckedChange = { checkedState = !checkedState})
+    Checkbox(checked = viewModel.remainLoginIn, onCheckedChange = { viewModel.remainLoginIn = !viewModel.remainLoginIn})
 
     Text(text = "kom ihåg mig")
 
@@ -189,21 +175,19 @@ fun Logotype(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun LoginPassowrd() {
+fun LoginPassowrd(viewModel: LoginScreenViewModel = viewModel()) {
 
-    // Tilstånd variabler för användarnamn och lösenord
-    var password by remember { mutableStateOf("") }
-    var passwordSynligt by remember { mutableStateOf(false) }
 
-    val icon = if (passwordSynligt) {
+    //byt ögonicon om lösenord ska visas eller inte
+    val icon = if (viewModel.passwordVisbility) {
         painterResource(R.drawable.visbility)
     } else {
         painterResource(R.drawable.not_visibi)
     }
 
     OutlinedTextField(
-        value = password,
-        onValueChange = { password = it },
+        value = viewModel.password,
+        onValueChange = { viewModel.password= it },
         label = { Text(text = "Lösenord") },
         textStyle = MaterialTheme.typography.bodyLarge,
         shape = RoundedCornerShape(30),
@@ -212,7 +196,7 @@ fun LoginPassowrd() {
         placeholder = { Text(text = "Password") },
         trailingIcon = {                                //ögat iconen
             IconButton(onClick = {
-                passwordSynligt = !passwordSynligt
+              viewModel.passwordVisbility = !viewModel.passwordVisbility
             }) {
                 Icon(
                     painter = icon,
@@ -223,20 +207,20 @@ fun LoginPassowrd() {
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Password
         ),
-        visualTransformation = if (passwordSynligt) VisualTransformation.None
+        visualTransformation = if (viewModel.passwordVisbility) VisualTransformation.None
         else PasswordVisualTransformation()
     )
 }
 
 
 @Composable
-fun LoginNameField() {
+fun LoginNameField(viewModel: LoginScreenViewModel = viewModel()) {
 
-    var userName by remember { mutableStateOf("") } // Skapåa ett tillstånd för username
+
 
     OutlinedTextField(
-        value = userName,
-        onValueChange = { userName = it },
+        value =viewModel.userName,
+        onValueChange = { viewModel.userName = it },
         label = { Text(text = "Användarnamn") },
         leadingIcon = {Icon(painter = painterResource(R.drawable.ic_user), contentDescription = null)},
         shape = RoundedCornerShape(30)
