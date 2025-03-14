@@ -2,7 +2,7 @@ package com.example.chattlyapp.navigation
 
 
 //Navigationbsa rutter för de olika skärmarna
-sealed class Routes(val routes: String) {
+sealed class Routes(val route: String) {
 
     object ChatScreen: Routes("chatScreen")
     object ContactsScreen: Routes("contactsScreen")

@@ -1,6 +1,5 @@
 package com.example.chattlyapp.screens
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,8 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Face
-import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
@@ -17,101 +15,90 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.chattlyapp.data.UserProfile
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.chattlyapp.viewmodel.UserProfileScreenViewModel
 
 @Composable
-fun MainScreenRegUser(modifier: Modifier = Modifier){
+fun UserProfileScreen(
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    viewModel: UserProfileScreenViewModel = viewModel()
+) {
 
-   /* var firstName by remember { mutableStateOf("") }
-    var lastName by remember { mutableStateOf("") }
-    var nickName by remember { mutableStateOf("") }
-    var eMail by remember { mutableStateOf("") }
-*/
-
-    var firstName: String = ""
-    var lastName: String = ""
-    var nickName: String = ""
-    var eMail: String = ""
-    var password: String = ""
-
-    var userInfo = UserProfile()
 
     Column(
         modifier = Modifier
             .padding(top = 42.dp)
             .background(MaterialTheme.colorScheme.background)
     ) {
-        firstName = CustomInput(label = "Föramn", icon = Icons.Default.Person)
-        lastName = CustomInput(label = "Efternamn", icon = Icons.Default.Face)
-        nickName = CustomInput(label = "Nickname", icon = Icons.Default.Person)
-        eMail = CustomInput(label = "E-post", icon = Icons.Default.Email)
-        password = CustomInput(label = "Lösenord", icon = Icons.Default.Lock)
+        CustomInput(label = "Förnamn",
+            value= viewModel.userProfile.firstName,
+            icon = Icons.Default.Person,
+            onValueChange = {viewModel.updateFirstName(it)})
 
+        CustomInput(label = "Efternamn",
+            value = viewModel.userProfile.lastName,
+            icon = Icons.Default.Person,
+            onValueChange = {viewModel.updateLastName(it)})
 
+        CustomInput(label = "Nickname",
+            value = viewModel.userProfile.nickName,
+            icon = Icons.Default.Favorite,
+            onValueChange = {viewModel.updateNickName(it)})
 
-        CustomButton(label = "Lägga till") {
-            adddUserProfile(firstName, lastName, nickName, eMail, password)
-            Log.d("!!!","Custom button clicked")
-        }
-
-
+       CustomInput(label = "E-Post",
+           value = viewModel.userProfile.eMail,
+           icon = Icons.Default.Email,
+           onValueChange = {viewModel.updateEmail(it)}
+           )
     }
 
-
 }
 
 
-@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun MainPreview(){
+fun CustomButton(modifier: Modifier = Modifier, label: String, onClick: () -> Unit) {
 
-    MainScreenRegUser()
-}
-@Composable
-fun CustomButton(modifier: Modifier = Modifier,label: String, onClick: () -> Unit){
-
-    ElevatedButton(onClick = onClick,) {
+    ElevatedButton(onClick = onClick) {
         Text(text = label)
     }
 
 
 }
-@Composable
-fun CustomInput(modifier: Modifier = Modifier,label: String,icon: ImageVector ): String{
 
-    var inputValue by remember { mutableStateOf("") }
+@Preview(showBackground = true)
+@Composable
+fun RegisterScreen() {
+    val navController = rememberNavController()  // Skapar en dummy-navController
+    UserProfileScreen(navController = navController)
+}
+
+
+@Composable
+fun CustomInput(modifier: Modifier = Modifier,
+                label: String,
+                value: String,
+                icon: ImageVector,
+                onValueChange: (String)-> Unit) {     // tar emot funktion för uppdatering
 
 
     OutlinedTextField(
-        value = inputValue,
+        value = value,
         modifier = Modifier
             .padding(16.dp)
             .fillMaxWidth(),
-        onValueChange = { inputValue = it },
+        onValueChange = onValueChange,
         label = { Text(text = label) },
         leadingIcon = { Icon(imageVector = icon, contentDescription = null) },
         shape = RoundedCornerShape(30)
     )
 
-return inputValue
-}
-
-fun adddUserProfile(firstName: String, lastName: String, nickName: String, eMail: String, password: String){
-
-    val useProfile = UserProfile(
-        firstName = firstName,
-        lastName = lastName,
-        nickName = nickName,
-        eMail = eMail,
-        password = password)
 
 }
 
