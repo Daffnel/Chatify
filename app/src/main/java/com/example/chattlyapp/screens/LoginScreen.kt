@@ -1,6 +1,5 @@
 package com.example.chattlyapp.screens
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -26,6 +25,10 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,15 +43,24 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.chattlyapp.ChattlyAppTheme
 import com.example.chattlyapp.R
+import com.example.chattlyapp.navigation.Routes
 import com.example.chattlyapp.viewmodel.LoginScreenViewModel
+import com.example.chattlyapp.viewmodel.LoginScreenViewModelFactory
 
 
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier,
-                viewModel: LoginScreenViewModel = viewModel()) {
+fun LoginScreen(factory: LoginScreenViewModelFactory,
+                navController: NavController ,
+                modifier: Modifier = Modifier,
+                viewModel: LoginScreenViewModel = viewModel(factory = factory)) {
+
+   var userName by remember { mutableStateOf("") }
+   var password by remember { mutableStateOf("") }
 
     Column(
         Modifier
@@ -83,7 +95,11 @@ fun LoginScreen(modifier: Modifier = Modifier,
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                AddUserBanner()
+
+                //klickas det på banner ska man kunn registrera sig
+                AddUserBanner() {
+                    navController.navigate(Routes.RegisterScreen.route)
+                }
 
                 Spacer(Modifier.size(32.dp))
 
@@ -98,11 +114,11 @@ fun LoginScreen(modifier: Modifier = Modifier,
 
 
 
-                LoginNameField()
+               LoginNameField(userName, onUserNameChange = { userName = it})
 
                 Spacer(Modifier.size(24.dp))
 
-                LoginPassowrd()
+                LoginPassowrd(password, onPasswordChange = {password = it})
 
                 Spacer(Modifier.size(16.dp))
 
@@ -112,11 +128,10 @@ fun LoginScreen(modifier: Modifier = Modifier,
 
                 val context = LocalContext.current
 
-                ElevatedButton(
+               ElevatedButton(
                     onClick = {
-                        Log.d("!!!", viewModel.password + viewModel.userName + viewModel.remainLoginIn )
-                        viewModel.customToast("meddlande",context)
-                    }, //TODO remove test only
+                        // viewModel.login(userName,password)
+                    },
                     Modifier.fillMaxWidth())
                 {
                     Text(text = "Logga in")
@@ -129,8 +144,10 @@ fun LoginScreen(modifier: Modifier = Modifier,
 
 }
 
+
+
 @Composable
-fun RemberMeNewPassword(viewModel: LoginScreenViewModel = viewModel()) {
+fun RemberMeNewPassword(viewModel: LoginScreenViewModel =viewModel() ) {
 
 
    // var checkedState by remember { mutableStateOf(true) }    Körs i viewmodel
@@ -175,7 +192,7 @@ fun Logotype(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun LoginPassowrd(viewModel: LoginScreenViewModel = viewModel()) {
+fun LoginPassowrd(password: String,viewModel: LoginScreenViewModel = viewModel(), onPasswordChange: (String) -> Unit) {
 
 
     //byt ögonicon om lösenord ska visas eller inte
@@ -186,13 +203,13 @@ fun LoginPassowrd(viewModel: LoginScreenViewModel = viewModel()) {
     }
 
     OutlinedTextField(
-        value = viewModel.password,
-        onValueChange = { viewModel.password= it },
+        value = password,
+        onValueChange = onPasswordChange,
         label = { Text(text = "Lösenord") },
         textStyle = MaterialTheme.typography.bodyLarge,
         shape = RoundedCornerShape(30),
         leadingIcon = {Icon(painter = painterResource(R.drawable.ic_lock), contentDescription =
-        null)},
+        "Hänglås")},
         placeholder = { Text(text = "Password") },
         trailingIcon = {                                //ögat iconen
             IconButton(onClick = {
@@ -214,13 +231,10 @@ fun LoginPassowrd(viewModel: LoginScreenViewModel = viewModel()) {
 
 
 @Composable
-fun LoginNameField(viewModel: LoginScreenViewModel = viewModel()) {
-
-
-
+fun LoginNameField(userName: String, onUserNameChange: (String) -> Unit) {
     OutlinedTextField(
-        value =viewModel.userName,
-        onValueChange = { viewModel.userName = it },
+        value = userName,
+        onValueChange = onUserNameChange,
         label = { Text(text = "Användarnamn") },
         leadingIcon = {Icon(painter = painterResource(R.drawable.ic_user), contentDescription = null)},
         shape = RoundedCornerShape(30)
@@ -230,8 +244,7 @@ fun LoginNameField(viewModel: LoginScreenViewModel = viewModel()) {
 }
 
 @Composable
-fun AddUserBanner() {
-
+fun AddUserBanner(onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .width(300.dp)
@@ -243,12 +256,13 @@ fun AddUserBanner() {
             text = "Inte en Chatify användare än?\nKlicka här för att skapa ett konto",
             Modifier
                 .align(Alignment.Center)
-                .clickable { },
+                .clickable { onClick()},
             textDecoration = TextDecoration.Underline,
             style = MaterialTheme.typography.bodyLarge
         )
 
     }
+
 }
 
 
@@ -258,7 +272,7 @@ fun AddUserBanner() {
 fun LoginScreenPreview() {
 
     ChattlyAppTheme {
-        LoginScreen()
+      // LoginScreen()
     }
 }
 
