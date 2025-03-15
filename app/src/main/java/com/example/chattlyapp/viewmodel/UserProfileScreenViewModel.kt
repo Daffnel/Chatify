@@ -1,5 +1,6 @@
 package com.example.chattlyapp.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -7,10 +8,13 @@ import androidx.lifecycle.ViewModel
 
 import com.example.chattlyapp.data.UserProfile
 
-class UserProfileScreenViewModel: ViewModel()
+class UserProfileScreenViewModel(private val repro: Reprository): ViewModel()
 {
     var userProfile by mutableStateOf(UserProfile())
-        private set   //ändas ändras av view modeln
+        private set
+
+    var userName = mutableStateOf("")
+    var password = mutableStateOf("")
 
 
     fun updateFirstName(addFirstName: String){
@@ -25,10 +29,29 @@ class UserProfileScreenViewModel: ViewModel()
         userProfile = userProfile.copy(eMail = addEmail)
     }
 
-    fun updateNickName(addfNickNamee: String){
-        userProfile = userProfile.copy(nickName = addfNickNamee)
+    fun updateNickName(addfNickName: String){
+        userProfile = userProfile.copy(nickName = addfNickName)
     }
 
+    fun updateUserID(addUserId: String){
+        userProfile = userProfile.copy(userID = addUserId)
+    }
+
+    // lägg till en ny användare
+    fun addNewUser(){
+        val userName = userName.value
+        val password = password.value
+
+        repro.addNewUser(userName,password)
+
+    }
+
+    // Spara användarens profil
+
+    fun saveProfile(){
+            updateUserID(repro.getUserId())
+             repro.saveUserProfile(userProfile)
+    }
 
 
 }

@@ -5,5 +5,6 @@ data class UserProfile (
     var lastName: String = "",
     var nickName: String = "",
     var eMail: String = "",
+    var userID: String = ""
 
 )

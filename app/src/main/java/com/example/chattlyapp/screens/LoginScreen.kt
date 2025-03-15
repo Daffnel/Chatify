@@ -26,8 +26,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,7 +41,6 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.chattlyapp.ChattlyAppTheme
@@ -59,8 +56,8 @@ fun LoginScreen(factory: LoginScreenViewModelFactory,
                 modifier: Modifier = Modifier,
                 viewModel: LoginScreenViewModel = viewModel(factory = factory)) {
 
-   var userName by remember { mutableStateOf("") }
-   var password by remember { mutableStateOf("") }
+   var userName by viewModel.userName
+   var password by viewModel.password
 
     Column(
         Modifier
@@ -69,14 +66,13 @@ fun LoginScreen(factory: LoginScreenViewModelFactory,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        //Spacer flytta ner allt i från toppeen
+        //Spacer flytta ner allt i från toppen
 
         Spacer(modifier = Modifier.height(24.dp))
 
 
         Logotype()
 
-//        Spacer(Modifier.size(0.dp))
 
 
         Surface(
@@ -98,7 +94,7 @@ fun LoginScreen(factory: LoginScreenViewModelFactory,
 
                 //klickas det på banner ska man kunn registrera sig
                 AddUserBanner() {
-                    navController.navigate(Routes.RegisterScreen.route)
+                    navController.navigate(Routes.UserProfileScreen.route + "/true")         // = true så får vi extra fält för att reg. ny användare
                 }
 
                 Spacer(Modifier.size(32.dp))
@@ -114,11 +110,11 @@ fun LoginScreen(factory: LoginScreenViewModelFactory,
 
 
 
-               LoginNameField(userName, onUserNameChange = { userName = it})
+               LoginNameField(userName, onUserNameChange = { viewModel.onUserNameChange(it)})
 
                 Spacer(Modifier.size(24.dp))
 
-                LoginPassowrd(password, onPasswordChange = {password = it})
+                LoginPassowrd(password, onPasswordChange = {viewModel.onPasswordChange(it)})
 
                 Spacer(Modifier.size(16.dp))
 
@@ -130,7 +126,8 @@ fun LoginScreen(factory: LoginScreenViewModelFactory,
 
                ElevatedButton(
                     onClick = {
-                        // viewModel.login(userName,password)
+
+                     viewModel.login()
                     },
                     Modifier.fillMaxWidth())
                 {

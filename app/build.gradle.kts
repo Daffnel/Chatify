@@ -60,6 +60,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.firebase.firestore.ktx)
+    implementation(libs.firebase.firestore)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
     implementation(libs.androidx.hilt.navigation.fragment)
         implementation(libs.hilt.android)
