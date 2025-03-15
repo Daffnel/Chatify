@@ -16,10 +16,3 @@ fun ChatScreen(navController: NavController){
 }
 
 
-@Preview
-@Composable
-fun ChatScreenPreview(){
-
-    val navController = rememberNavController()  // Skapar en dummy-navController
-    ChatScreen(navController = navController)
-}

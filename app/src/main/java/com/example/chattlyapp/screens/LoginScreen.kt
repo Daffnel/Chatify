@@ -66,14 +66,13 @@ fun LoginScreen(factory: LoginScreenViewModelFactory,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        //Spacer flytta ner allt i från toppeen
+        //Spacer flytta ner allt i från toppen
 
         Spacer(modifier = Modifier.height(24.dp))
 
 
         Logotype()
 
-//        Spacer(Modifier.size(0.dp))
 
 
         Surface(
@@ -95,7 +94,7 @@ fun LoginScreen(factory: LoginScreenViewModelFactory,
 
                 //klickas det på banner ska man kunn registrera sig
                 AddUserBanner() {
-                    navController.navigate(Routes.UserProfileScreen.route)
+                    navController.navigate(Routes.UserProfileScreen.route + "/true")         // = true så får vi extra fält för att reg. ny användare
                 }
 
                 Spacer(Modifier.size(32.dp))

@@ -1,24 +1,15 @@
 package com.example.chattlyapp
 
 import android.Manifest
-import android.app.Activity
-import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -26,14 +17,11 @@ import com.example.chattlyapp.navigation.Routes
 import com.example.chattlyapp.screens.ChatScreen
 import com.example.chattlyapp.screens.ContactScreen
 import com.example.chattlyapp.screens.LoginScreen
-import com.example.chattlyapp.screens.RegistrerScreen
 import com.example.chattlyapp.screens.UserProfileScreen
-import com.example.chattlyapp.viewmodel.AuthReprository
+import com.example.chattlyapp.viewmodel.Reprository
 import com.example.chattlyapp.viewmodel.FirebaseManger
-import com.example.chattlyapp.viewmodel.LoginScreenViewModel
 import com.example.chattlyapp.viewmodel.LoginScreenViewModelFactory
-import com.google.firebase.auth.FirebaseAuth
-import dagger.hilt.android.AndroidEntryPoint
+import com.example.chattlyapp.viewmodel.UserProfileScreenViewModelFactory
 
 
 class MainActivity : ComponentActivity() {
@@ -93,8 +81,11 @@ class MainActivity : ComponentActivity() {
         val navController = rememberNavController()
 
         //ok. vi får lura LoginScreen på en factory :-)
-        val factory: LoginScreenViewModelFactory =
-            LoginScreenViewModelFactory(AuthReprository(firebasemanger = FirebaseManger()))
+        val factoryLoginScreen: LoginScreenViewModelFactory =
+            LoginScreenViewModelFactory(Reprository(firebasemanger = FirebaseManger()))
+
+        val factoryUserProfileScreen: UserProfileScreenViewModelFactory =
+            UserProfileScreenViewModelFactory(Reprository(firebasemanger = FirebaseManger()))
 
         NavHost(
             navController = navController,
@@ -102,7 +93,7 @@ class MainActivity : ComponentActivity() {
         ) { //Todo ändra till rätt dest.
 
             composable(Routes.LoginScreen.route) {
-                LoginScreen(factory, navController = navController)
+                LoginScreen(factory = factoryLoginScreen, navController = navController)
             }
 
             composable(Routes.ChatScreen.route) {
@@ -113,10 +104,11 @@ class MainActivity : ComponentActivity() {
                 ContactScreen(navController = navController)
             }
 
-            composable(Routes.UserProfileScreen.route) {
-                UserProfileScreen(navController = navController)
-            }
+            composable(Routes.UserProfileScreen.route + "/{regNewUser}"){ backStackEntry ->                  //Allt detta för att skicka med argument till UserProfileScreen för att inkludera fält för att reg ny användare
+                val regNewUser = backStackEntry.arguments?.getString("regNewUser")?.toBoolean() ?: false
 
+                    UserProfileScreen(navController = navController, showRegScreen = regNewUser, factory = factoryUserProfileScreen)
+            }
 
             // composable(Routes.RegisterScreen.route){
             //    RegistrerScreen(navController = navController)

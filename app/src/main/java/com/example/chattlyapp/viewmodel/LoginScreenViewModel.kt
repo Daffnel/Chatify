@@ -1,15 +1,15 @@
 package com.example.chattlyapp.viewmodel
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 
 
-class LoginScreenViewModel(private val repro: AuthReprository) : ViewModel(){
+class LoginScreenViewModel(private val repro: Reprository) : ViewModel(){
 
     var passwordVisbility by mutableStateOf(false)
     var remainLoginIn by mutableStateOf(true)
@@ -32,8 +32,10 @@ class LoginScreenViewModel(private val repro: AuthReprository) : ViewModel(){
         val userName = userName.value
         val password = password.value
 
+        val context = LocalContext
+
         repro.userLogin(userName,password)
-        // Rensa Användartnamn och lösenord
+
 
     }
 

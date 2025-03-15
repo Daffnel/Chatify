@@ -7,10 +7,13 @@ import androidx.lifecycle.ViewModel
 
 import com.example.chattlyapp.data.UserProfile
 
-class UserProfileScreenViewModel: ViewModel()
+class UserProfileScreenViewModel(private val repro: Reprository): ViewModel()
 {
     var userProfile by mutableStateOf(UserProfile())
-        private set   //ändas ändras av view modeln
+        private set
+
+    var userName = mutableStateOf("")
+    var password = mutableStateOf("")
 
 
     fun updateFirstName(addFirstName: String){
@@ -29,6 +32,16 @@ class UserProfileScreenViewModel: ViewModel()
         userProfile = userProfile.copy(nickName = addfNickNamee)
     }
 
+    // lägg till en ny användare
+
+    fun addNewUser(){
+        val userName = userName.value
+        val password = password.value
+
+        repro.addNewUser(userName,password)
+
+
+    }
 
 
 }

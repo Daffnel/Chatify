@@ -11,10 +11,3 @@ fun RegistrerScreen(navController: NavController){
     Text(text = "Registrer Screen")
 }
 
-@Preview(showBackground = true, showSystemUi = true )
-@Composable
-fun RegScreenPreview(){
-    //dummy navcontroller
-    val navcontroller = rememberNavController()
-    RegisterScreen(navcontroller)
-}
