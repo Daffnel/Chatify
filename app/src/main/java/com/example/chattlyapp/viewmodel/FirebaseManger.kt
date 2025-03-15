@@ -11,14 +11,15 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class FirebaseManger {
 
-    private val db = FirebaseFirestore.getInstance()
-    private val auth = FirebaseAuth.getInstance()
+
+     private val auth = FirebaseAuth.getInstance()
 
     var context = LocalContext
 
+    fun getUserID() = auth.currentUser?.uid
+
 
     //Logga in en användare
-
     fun loginUser(userName: String, password: String){
 
 

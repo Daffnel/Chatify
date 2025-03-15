@@ -97,9 +97,12 @@ fun UserProfileScreen(
            RegNewUser(
                userName = userName,
                password = password,
-               onUserChangeName = { userName = it },
+               onUserChangeName = { userName = it
+                                  viewModel.updateEmail(userName)},
                OnUserChangePassword = {password = it},
-               addUserButtonClick = {viewModel.addNewUser()},
+               addUserButtonClick = {
+                 viewModel.addNewUser()
+                  viewModel.saveProfile() },
                addUserCancel = {navController.navigate(Routes.LoginScreen.route)})    // Avbryt och återgå till login skärmen
 
        }

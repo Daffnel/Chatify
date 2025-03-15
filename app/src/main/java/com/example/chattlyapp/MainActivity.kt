@@ -16,6 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.chattlyapp.navigation.Routes
 import com.example.chattlyapp.screens.ChatScreen
 import com.example.chattlyapp.screens.ContactScreen
+import com.example.chattlyapp.screens.Homescreen
 import com.example.chattlyapp.screens.LoginScreen
 import com.example.chattlyapp.screens.UserProfileScreen
 import com.example.chattlyapp.viewmodel.Reprository
@@ -110,8 +111,9 @@ class MainActivity : ComponentActivity() {
                     UserProfileScreen(navController = navController, showRegScreen = regNewUser, factory = factoryUserProfileScreen)
             }
 
-            // composable(Routes.RegisterScreen.route){
-            //    RegistrerScreen(navController = navController)
+            composable(Routes.HomeScreen.route) {
+                Homescreen(navController = navController)
+            }
         }
     }
 
