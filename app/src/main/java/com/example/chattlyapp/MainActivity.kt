@@ -29,6 +29,7 @@ import com.example.chattlyapp.screens.LoginScreen
 import com.example.chattlyapp.screens.RegistrerScreen
 import com.example.chattlyapp.screens.UserProfileScreen
 import com.example.chattlyapp.viewmodel.AuthReprository
+import com.example.chattlyapp.viewmodel.FirebaseManger
 import com.example.chattlyapp.viewmodel.LoginScreenViewModel
 import com.example.chattlyapp.viewmodel.LoginScreenViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
@@ -36,8 +37,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 
 class MainActivity : ComponentActivity() {
-
-
 
 
     val CONTACTS_REQUEST_CODE = 101   //vilken vi använder senare för att identifera tillståndet
@@ -49,10 +48,10 @@ class MainActivity : ComponentActivity() {
         deviceId: Int
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults, deviceId)
-        if(grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED){
-            Log.d("!!!","Tillstånd har blivit nekat av användaren")
-        }else {
-            Log.d("!!!","Tillstånd har blivit godkänt av användaren")
+        if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+            Log.d("!!!", "Tillstånd har blivit nekat av användaren")
+        } else {
+            Log.d("!!!", "Tillstånd har blivit godkänt av användaren")
         }
 
     }
@@ -69,47 +68,8 @@ class MainActivity : ComponentActivity() {
             ChattlyAppTheme {
                 MainScreen()
             }
-            }
-        }
-
-@Composable             //Sköter navigationen
-fun MainScreen(){
-    val navController = rememberNavController()
-
-    //ok. vi får lura LoginScreen på en factory :-)
-    val factory: LoginScreenViewModelFactory = LoginScreenViewModelFactory(AuthReprository())
-
-    NavHost(navController = navController,
-        startDestination = Routes.LoginScreen.route) { //Todo ändra till rätt dest.
-
-
-
-        composable(Routes.LoginScreen.route) {
-            LoginScreen(factory,navController = navController)
-        }
-
-        composable(Routes.ChatScreen.route){
-            ChatScreen(navController = navController)
-        }
-
-        composable(Routes.ContactsScreen.route){
-            ContactScreen(navController = navController)
-        }
-
-        /*composable(Routes.UserProfileScreen.route){
-            Routes.UserProfileScreen(navController = navController)
-        }  TODO  Kolla upp varför denna inte fungerar */
-
-
-        composable(Routes.RegisterScreen.route){
-            RegistrerScreen(navController = navController)
         }
     }
-
-
-
-}
-
     //Ordna med tillstånd att få läsa telefonboken
     fun setupPremissions() {
 
@@ -125,16 +85,43 @@ fun MainScreen(){
                 arrayOf(Manifest.permission.READ_CONTACTS), CONTACTS_REQUEST_CODE
             )
 
-
         }
-
-
-
     }
 
+    @Composable             //Sköter navigationen
+    fun MainScreen() {
+        val navController = rememberNavController()
+
+        //ok. vi får lura LoginScreen på en factory :-)
+        val factory: LoginScreenViewModelFactory =
+            LoginScreenViewModelFactory(AuthReprository(firebasemanger = FirebaseManger()))
+
+        NavHost(
+            navController = navController,
+            startDestination = Routes.LoginScreen.route
+        ) { //Todo ändra till rätt dest.
+
+            composable(Routes.LoginScreen.route) {
+                LoginScreen(factory, navController = navController)
+            }
+
+            composable(Routes.ChatScreen.route) {
+                ChatScreen(navController = navController)
+            }
+
+            composable(Routes.ContactsScreen.route) {
+                ContactScreen(navController = navController)
+            }
+
+            composable(Routes.UserProfileScreen.route) {
+                UserProfileScreen(navController = navController)
+            }
+
+
+            // composable(Routes.RegisterScreen.route){
+            //    RegistrerScreen(navController = navController)
+        }
+    }
 
 }
-
-
-
 

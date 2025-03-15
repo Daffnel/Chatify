@@ -21,11 +21,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.chattlyapp.viewmodel.UserProfileScreenViewModel
 
 @Composable
 fun UserProfileScreen(
+
     navController: NavController,
     modifier: Modifier = Modifier,
     viewModel: UserProfileScreenViewModel = viewModel()
@@ -74,7 +76,7 @@ fun CustomButton(modifier: Modifier = Modifier, label: String, onClick: () -> Un
 
 @Preview(showBackground = true)
 @Composable
-fun RegisterScreen() {
+fun RegisterScreen(navcontroller: NavHostController) {
     val navController = rememberNavController()  // Skapar en dummy-navController
     UserProfileScreen(navController = navController)
 }
