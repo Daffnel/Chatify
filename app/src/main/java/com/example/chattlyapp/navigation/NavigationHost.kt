@@ -12,6 +12,9 @@ import com.example.chattlyapp.screens.ContactScreen
 import com.example.chattlyapp.screens.Homescreen
 import com.example.chattlyapp.screens.LoginScreen
 import com.example.chattlyapp.screens.UserProfileScreen
+import com.example.chattlyapp.viewmodel.ChatRepository
+import com.example.chattlyapp.viewmodel.ChatScreenViewModel
+import com.example.chattlyapp.viewmodel.ChatScreenViewModelFactory
 import com.example.chattlyapp.viewmodel.ContactsScreenViewModel
 import com.example.chattlyapp.viewmodel.ContactsScreenViewModelFactory
 import com.example.chattlyapp.viewmodel.FirebaseManger
@@ -27,13 +30,14 @@ fun NavigationHost(navController: NavHostController){
     val factoryLoginScreen = remember { LoginScreenViewModelFactory(Reprository(firebaseManager)) }
     val factoryUserProfileScreen = remember { UserProfileScreenViewModelFactory(Reprository(firebaseManager)) }
     val factoryContactsScreen = remember {ContactsScreenViewModelFactory(Reprository(firebaseManager))}
+    val factoryChatScreen = remember { ChatScreenViewModelFactory(ChatRepository()) }
 
     val contactsViewModel: ContactsScreenViewModel = viewModel(factory = factoryContactsScreen)   //bäst att skicka viewmodels redan här för att undvika upprepning
-
+    val chatScreenViewModel: ChatScreenViewModel = viewModel(factory = factoryChatScreen)
 
     NavHost(
         navController = navController,
-        startDestination = Routes.LoginScreen.route   //Todo ändra till rätt skärm
+        startDestination = Routes.LoginScreen.route
     ) {
 
         composable(Routes.LoginScreen.route) {
@@ -41,7 +45,7 @@ fun NavigationHost(navController: NavHostController){
         }
 
         composable(Routes.ChatScreen.route) {
-            ChatScreen()
+            ChatScreen(chatScreenViewModel)
         }
 
         composable(Routes.ContactsScreen.route) {

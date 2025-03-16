@@ -14,8 +14,6 @@ class FirebaseManger {
 
      private val auth = FirebaseAuth.getInstance()
 
-    var context = LocalContext
-
     fun getUserID() = auth.currentUser?.uid
 
 
