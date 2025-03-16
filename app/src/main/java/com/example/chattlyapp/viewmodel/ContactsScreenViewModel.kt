@@ -7,7 +7,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.chattlyapp.data.UserInfoFromContacts
 
-class ContactsScreenViewModel: ViewModel() {
+class ContactsScreenViewModel(private val repo: Reprository): ViewModel() {
 
     val contactList = mutableListOf<UserInfoFromContacts>()
 
