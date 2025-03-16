@@ -25,7 +25,7 @@ import com.example.chattlyapp.navigation.Routes
 import com.example.chattlyapp.screens.BottomBarNavigation
 import com.example.chattlyapp.viewmodel.Reprository
 import com.example.chattlyapp.viewmodel.FirebaseManger
-import com.example.chattlyapp.viewmodel.LoginScreenViewModelFactory
+
 import com.example.chattlyapp.viewmodel.UserProfileScreenViewModelFactory
 
 

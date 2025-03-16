@@ -8,8 +8,8 @@ class Reprository(private val firebasemanger: FirebaseManger) {
 
     private val db = FirebaseFirestore.getInstance()
 
-    fun userLogin(userName: String, password: String) {
-       firebasemanger.loginUser(userName, password)
+    fun userLogin(userName: String, password: String): Boolean {
+       return firebasemanger.loginUser(userName, password)
     }
 
     fun addNewUser(userName: String, password: String) {
@@ -27,10 +27,37 @@ class Reprository(private val firebasemanger: FirebaseManger) {
     fun loggOut(){
         firebasemanger.logoutUser()
     }
-    fun saveUserProfile(userProfile: UserProfile){
 
-        Log.d("!!!","$userProfile")
+    //Sparar användarens profil
+    fun saveUserProfile(userProfile: UserProfile) {
+        db.collection("users")
+            .document()
+            .set(userProfile)
+            .addOnSuccessListener {
+                Log.d("!!!", "ny profil skapad")
+            }
+            .addOnFailureListener { e ->
+                Log.e("!!!", "Skapandet abv profile misslyckades", e)
+            }
 
+        }
+
+    //Hämta lista med användare
+
+    fun fetchUsers(callback: (List<UserProfile>) -> Unit){
+
+            db.collection("users").get()
+                .addOnSuccessListener { result ->
+                    val userlist = result.documents.mapNotNull { dokument ->
+                        dokument.toObject(UserProfile::class.java)
+                    }
+                    callback(userlist)
+                    Log.d("!!!","Hämtade av användarlistan ok")
+                }
+                .addOnFailureListener { e ->
+                    callback(emptyList())
+                    Log.d("!!!","Misslyckades med att hämta användarw")
+                }
+    }
 
     }
-}

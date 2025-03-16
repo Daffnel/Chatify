@@ -48,9 +48,9 @@ class UserProfileScreenViewModel(private val repro: Reprository): ViewModel()
 
     // Spara användarens profil
 
-    fun saveProfile(){
+    fun saveUserProfile(){
             updateUserID(repro.getUserId())
-             repro.saveUserProfile(userProfile)
+            repro.saveUserProfile(userProfile)
     }
 
 

@@ -4,20 +4,16 @@ import android.content.Context
 import android.database.Cursor
 import android.provider.ContactsContract
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.example.chattlyapp.data.Contacts
-import com.example.chattlyapp.navigation.Routes
+import com.example.chattlyapp.data.UserInfoFromContacts
 
 class ContactsScreenViewModel: ViewModel() {
 
-
-
+    val contactList = mutableListOf<UserInfoFromContacts>()
 
     /* Läser in all kontakter i en array match sedan email mot FB för att hitta användare */
-    fun getContact(context: Context): List<Contacts> {
-        val contactList = mutableListOf<Contacts>()
+    fun getContact(context: Context): List<UserInfoFromContacts> {
+
 
         val cursor: Cursor? =
             context.contentResolver.query(            //Cursor hanterar läsning i från databasen
@@ -30,7 +26,6 @@ class ContactsScreenViewModel: ViewModel() {
                 null,
                 ContactsContract.CommonDataKinds.Email.DISPLAY_NAME_PRIMARY + " ASC" //Sortera i bokstavsordning
             )
-
 
         cursor?.use { data ->
             val name =  data.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Email.DISPLAY_NAME_PRIMARY)  //funkar detta men Primary
@@ -46,18 +41,26 @@ class ContactsScreenViewModel: ViewModel() {
                 val lastName = parts.getOrNull(1) ?: ""
 
 
-                contactList.add(Contacts(firstName = firstName, lastName = lastName, eMail = email2))
+                contactList.add(UserInfoFromContacts(firstName = firstName, lastName = lastName, eMail = email2))
 
             }
         }
 
         cursor?.close()
-
-
-
-
         return contactList
-
-
     }
+
+
+//jämför användarens mailadress med mailadreserna i telefonboken för att hitta en chat kompisr
+
+/*fun findMatchingUser() {
+
+
+    reprository.fetchUsers { firebaseUsers ->
+        val commonUsers = firebaseUsers.filter { it.eMail in contactList.map { user -> user.eMail } }
+        Log.d("!!!", "Gemensamma användare: $commonUsers")
+    }
+
+}*/
+
 }

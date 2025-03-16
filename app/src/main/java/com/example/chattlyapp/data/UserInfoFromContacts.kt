@@ -1,6 +1,6 @@
 package com.example.chattlyapp.data
 
-data class Contacts(
+data class UserInfoFromContacts(
     val firstName: String = "" ,
     val lastName: String = "",
     val eMail: String = "",
