@@ -9,7 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.chattlyapp.navigation.Routes
 
 @Composable
-fun ChatScreen(navController: NavController){
+fun ChatScreen(){
 
 
 
