@@ -42,11 +42,8 @@ fun ContactScreen(viewModel: ContactsScreenViewModel){
    Column(modifier = Modifier
        .padding(top = 36.dp)) {
 
-
        HeaderText()
-
        ContactList(viewModel = viewModel)
-
    }
 
     Log.d("!!!","${viewModel.getContact(LocalContext.current)} ")
@@ -60,7 +57,6 @@ fun HeaderText(modifier: Modifier = Modifier) {
         fontSize = 20.sp,
         fontWeight = FontWeight.Bold,
         color = MaterialTheme.colorScheme.onSecondaryContainer)
-
 }
 
 
@@ -68,11 +64,8 @@ fun HeaderText(modifier: Modifier = Modifier) {
 fun ContactList(modifier: Modifier = Modifier,
                 viewModel: ContactsScreenViewModel){
 
-
     val context = LocalContext.current
-
     val contactsList = viewModel.getContact(context)
-
 
     LazyColumn(modifier) {
         items(contactsList) { contact ->
@@ -92,11 +85,7 @@ fun ContactsListCard(modifier: Modifier = Modifier,contacts: UserInfoFromContact
         modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .clickable {
-                if(contacts.isUser){
-                    //om användren är användare så går det att klicka
-                }
-                       },
+            .clickable {       },
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)){
         Row(verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(16.dp)) {
