@@ -5,11 +5,33 @@ import android.database.Cursor
 import android.provider.ContactsContract
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.chattlyapp.data.UserInfoFromContacts
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+
 
 class ContactsScreenViewModel(private val repo: Reprository): ViewModel() {
 
     val contactList = mutableListOf<UserInfoFromContacts>()
+
+    private val _firebaseUsers = MutableStateFlow<List<UserInfoFromContacts>>(emptyList()) // Variabel för att lagra data
+    val firebaseUsers: StateFlow<List<UserInfoFromContacts>> = _firebaseUsers // Exponeras som StateFlow
+
+    init {
+        fetchUser()     //läser in datan det första vi gör
+    }
+
+    private fun fetchUser() {
+        viewModelScope.launch {
+            _firebaseUsers.value = repo.fetchUser()
+        }
+    }
+
+
+
+    // skapen lista med alla som är användare markerade
 
     /* Läser in all kontakter i en array match sedan email mot FB för att hitta användare */
     fun getContact(context: Context): List<UserInfoFromContacts> {
@@ -28,39 +50,46 @@ class ContactsScreenViewModel(private val repo: Reprository): ViewModel() {
             )
 
         cursor?.use { data ->
-            val name =  data.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Email.DISPLAY_NAME_PRIMARY)  //funkar detta men Primary
+            val name =
+                data.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Email.DISPLAY_NAME_PRIMARY)  //funkar detta men Primary
             val email = data.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Email.ADDRESS)
 
 
             while (data.moveToNext()) {
-                val firstAndLastName  = data.getString(name)  // Hämta namn
+                val firstAndLastName = data.getString(name)  // Hämta namn
                 val email2 = data.getString(email) // Hämta e-postadress
 
-               val parts = firstAndLastName.split(" ") //dela namnet vid mellanslag
-               val firstName = parts.getOrNull(0) ?: ""
+                val parts = firstAndLastName.split(" ") //dela namnet vid mellanslag
+                val firstName = parts.getOrNull(0) ?: ""
                 val lastName = parts.getOrNull(1) ?: ""
-
-
-                contactList.add(UserInfoFromContacts(firstName = firstName, lastName = lastName, eMail = email2))
+                contactList.add(
+                    UserInfoFromContacts(
+                        firstName = firstName,
+                        lastName = lastName,
+                        email = email2,
+                        isUser = false
+                    )
+                )
 
             }
         }
 
         cursor?.close()
-        return contactList
+
+        /* Marker alla användare som matchar isUser = True */
+        Log.d("!!!", "Kontaktlista: $contactList")
+        Log.d("!!!", "FirebaseUsers: ${firebaseUsers.value}")
+        return contactList.map{contact ->
+            UserInfoFromContacts(
+                firstName = contact.firstName,
+                lastName = contact.lastName,
+                email = contact.email,
+                nickName = contact.nickName,
+                isUser = firebaseUsers.value.any(){it.email == contact.email} // isUser sätts till true eller false här
+            )
+        }
+
+
     }
-
-
-//jämför användarens mailadress med mailadreserna i telefonboken för att hitta en chat kompisr
-
-/*fun findMatchingUser() {
-
-
-    reprository.fetchUsers { firebaseUsers ->
-        val commonUsers = firebaseUsers.filter { it.eMail in contactList.map { user -> user.eMail } }
-        Log.d("!!!", "Gemensamma användare: $commonUsers")
-    }
-
-}*/
 
 }

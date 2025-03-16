@@ -28,6 +28,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,6 +54,7 @@ import com.example.chattlyapp.navigation.Routes
 import com.example.chattlyapp.viewmodel.LoginScreenViewModel
 import com.example.chattlyapp.viewmodel.LoginScreenViewModelFactory
 import com.example.chattlyapp.navigation.NavigationHost
+import com.example.chattlyapp.utils.OnlyForPayingCustomers
 
 
 @Composable
@@ -166,7 +169,7 @@ fun LoginScreen(
 fun RemberMeNewPassword(viewModel: LoginScreenViewModel = viewModel()) {
 
 
-    // var checkedState by remember { mutableStateOf(true) }    Körs i viewmodel
+
 
     Row(
         modifier = Modifier, horizontalArrangement = Arrangement.Start,
@@ -181,7 +184,7 @@ fun RemberMeNewPassword(viewModel: LoginScreenViewModel = viewModel()) {
         Spacer(Modifier.size(8.dp))
         Text(
             text = " Glömt lösenordet",
-            Modifier.clickable { /*TODO */ },
+            Modifier.clickable { },
             textDecoration = TextDecoration.Underline,
             color = Color.Red
         )

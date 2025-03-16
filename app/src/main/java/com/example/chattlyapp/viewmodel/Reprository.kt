@@ -1,8 +1,13 @@
 package com.example.chattlyapp.viewmodel
 
+import android.content.Context
+import android.database.Cursor
+import android.provider.ContactsContract
 import android.util.Log
+import com.example.chattlyapp.data.UserInfoFromContacts
 import com.example.chattlyapp.data.UserProfile
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.tasks.await
 
 class Reprository(private val firebasemanger: FirebaseManger) {
 
@@ -43,21 +48,14 @@ class Reprository(private val firebasemanger: FirebaseManger) {
         }
 
     //Hämta lista med användare
-
-    fun fetchUsers(callback: (List<UserProfile>) -> Unit){
-
-            db.collection("users").get()
-                .addOnSuccessListener { result ->
-                    val userlist = result.documents.mapNotNull { dokument ->
-                        dokument.toObject(UserProfile::class.java)
-                    }
-                    callback(userlist)
-                    Log.d("!!!","Hämtade av användarlistan ok")
-                }
-                .addOnFailureListener { e ->
-                    callback(emptyList())
-                    Log.d("!!!","Misslyckades med att hämta användarw")
-                }
+    suspend fun fetchUser(): List<UserInfoFromContacts>{
+        return try {
+            val result = db.collection("users").get().await()
+            result.documents.mapNotNull { it.toObject(UserInfoFromContacts::class.java) }
+        }catch (e: Exception){
+            emptyList()    //tom lista om det inte fungerar
+        }
     }
+
 
     }
