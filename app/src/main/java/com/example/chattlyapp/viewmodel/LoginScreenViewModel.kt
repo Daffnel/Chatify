@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModel
 import com.google.protobuf.Internal.BooleanList
 
 
-class LoginScreenViewModel(private val repro: Reprository) : ViewModel(){
+class LoginScreenViewModel(private val repro: Reprository) : ViewModel() {
 
     var passwordVisbility by mutableStateOf(false)
     var remainLoginIn by mutableStateOf(true)
@@ -21,35 +21,30 @@ class LoginScreenViewModel(private val repro: Reprository) : ViewModel(){
     var userName = mutableStateOf("")
 
 
-    fun onUserNameChange(newUserName: String){
+    fun onUserNameChange(newUserName: String) {
         userName.value = newUserName
 
     }
 
-    fun onPasswordChange(newPassword: String){
+    fun onPasswordChange(newPassword: String) {
         password.value = newPassword
     }
 
-    fun isUserLoggedIn():Boolean{
-        return  repro.isuserLoggedIn()
+    fun isUserLoggedIn(): Boolean {
+        Log.d("!!!", "Användaren inlogga? ${repro.isuserLoggedIn()}")
+        return repro.isuserLoggedIn()
+
     }
 
-    fun loggOut(){
+    fun loggOut() {
         repro.loggOut()
     }
 
-    fun login(){
+    fun login(): Boolean {
         val userName = userName.value
         val password = password.value
 
-         repro.userLogin(userName,password)
-        }
-
-
-
-
-    fun customToast(message: String, context: Context){
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+       return repro.userLogin(userName, password)
     }
 
 }

@@ -55,18 +55,20 @@ import com.example.chattlyapp.navigation.NavigationHost
 
 
 @Composable
-fun LoginScreen(navController: NavController,
-                factory: LoginScreenViewModelFactory,
-                modifier: Modifier = Modifier,
-                viewModel: LoginScreenViewModel = viewModel(factory = factory)) {
+fun LoginScreen(
+    navController: NavController,
+    factory: LoginScreenViewModelFactory,
+    modifier: Modifier = Modifier,
+    viewModel: LoginScreenViewModel = viewModel(factory = factory)
+) {
 
     //logga ut ev. tidigare inlogg
-   viewModel.loggOut()
+    viewModel.loggOut()
 
     Log.d("!!!", viewModel.isUserLoggedIn().toString())
 
-   var userName by viewModel.userName
-   var password by viewModel.password
+    var userName by viewModel.userName
+    var password by viewModel.password
 
 
 
@@ -116,17 +118,18 @@ fun LoginScreen(navController: NavController,
                     textAlign = TextAlign.Start,
                     fontSize = 45.sp,
                     style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onSecondaryContainer)
+                    color = MaterialTheme.colorScheme.onSecondaryContainer
+                )
 
                 Spacer(Modifier.size(16.dp))
 
 
 
-               LoginNameField(userName, onUserNameChange = { viewModel.onUserNameChange(it)})
+                LoginNameField(userName, onUserNameChange = { viewModel.onUserNameChange(it) })
 
                 Spacer(Modifier.size(24.dp))
 
-                LoginPassowrd(password, onPasswordChange = {viewModel.onPasswordChange(it)})
+                LoginPassowrd(password, onPasswordChange = { viewModel.onPasswordChange(it) })
 
                 Spacer(Modifier.size(16.dp))
 
@@ -136,17 +139,17 @@ fun LoginScreen(navController: NavController,
 
                 val context = LocalContext.current
 
-               ElevatedButton(
+                ElevatedButton(
                     onClick = {
-                     if(!viewModel.isUserLoggedIn()) {              //Todo något är knass undersök
-                         Log.d("!!!","Inlogg ok ska skickas vidare")
-                         navController.navigate(Routes.HomeScreen.route){
-                         }
-                     }else {
-                         Toast.makeText(context,"Inloggning misslyckades, försök igen",Toast.LENGTH_SHORT).show()
-                     }
+                        if(!viewModel.isUserLoggedIn()) {   //todo Urk!!
+                            viewModel.login()
+                            navController.navigate(Routes.HomeScreen.route)
+                        }else{
+                            navController.navigate(Routes.ContactsScreen.route)
+                        }
                     },
-                    Modifier.fillMaxWidth())
+                    Modifier.fillMaxWidth()
+                )
                 {
                     Text(text = "Logga in")
                 }
@@ -159,31 +162,35 @@ fun LoginScreen(navController: NavController,
 }
 
 
-
 @Composable
-fun RemberMeNewPassword(viewModel: LoginScreenViewModel =viewModel() ) {
+fun RemberMeNewPassword(viewModel: LoginScreenViewModel = viewModel()) {
 
 
-   // var checkedState by remember { mutableStateOf(true) }    Körs i viewmodel
+    // var checkedState by remember { mutableStateOf(true) }    Körs i viewmodel
 
-    Row(modifier = Modifier, horizontalArrangement = Arrangement.Start,
-    verticalAlignment = Alignment.CenterVertically) {
-    Checkbox(checked = viewModel.remainLoginIn, onCheckedChange = { viewModel.remainLoginIn = !viewModel.remainLoginIn})
+    Row(
+        modifier = Modifier, horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Checkbox(
+            checked = viewModel.remainLoginIn,
+            onCheckedChange = { viewModel.remainLoginIn = !viewModel.remainLoginIn })
 
-    Text(text = "kom ihåg mig")
+        Text(text = "kom ihåg mig")
 
-    Spacer(Modifier.size(8.dp))
-    Text(text =" Glömt lösenordet",
-        Modifier.clickable { /*TODO */ },
-        textDecoration = TextDecoration.Underline,
-        color = Color.Red)
+        Spacer(Modifier.size(8.dp))
+        Text(
+            text = " Glömt lösenordet",
+            Modifier.clickable { /*TODO */ },
+            textDecoration = TextDecoration.Underline,
+            color = Color.Red
+        )
+
+    }
+
 
 }
 
-
-
-
-}
 @Composable
 fun Logotype(modifier: Modifier = Modifier) {
 
@@ -194,19 +201,25 @@ fun Logotype(modifier: Modifier = Modifier) {
             Modifier.alignByBaseline(),
             color = MaterialTheme.colorScheme.onSecondaryContainer,
             fontSize = 100.sp,
-            letterSpacing = 4.sp)
+            letterSpacing = 4.sp
+        )
 
         Text(
             text = "hatify..",
             Modifier.alignByBaseline(),
             color = MaterialTheme.colorScheme.onSecondaryContainer,
             letterSpacing = 4.sp,
-            fontSize = 60.sp)
+            fontSize = 60.sp
+        )
     }
 }
 
 @Composable
-fun LoginPassowrd(password: String,viewModel: LoginScreenViewModel = viewModel(), onPasswordChange: (String) -> Unit) {
+fun LoginPassowrd(
+    password: String,
+    viewModel: LoginScreenViewModel = viewModel(),
+    onPasswordChange: (String) -> Unit
+) {
 
 
     //byt ögonicon om lösenord ska visas eller inte
@@ -222,12 +235,16 @@ fun LoginPassowrd(password: String,viewModel: LoginScreenViewModel = viewModel()
         label = { Text(text = "Lösenord") },
         textStyle = MaterialTheme.typography.bodyLarge,
         shape = RoundedCornerShape(30),
-        leadingIcon = {Icon(painter = painterResource(R.drawable.ic_lock), contentDescription =
-        "Hänglås")},
+        leadingIcon = {
+            Icon(
+                painter = painterResource(R.drawable.ic_lock), contentDescription =
+                "Hänglås"
+            )
+        },
         placeholder = { Text(text = "Password") },
         trailingIcon = {                                //ögat iconen
             IconButton(onClick = {
-              viewModel.passwordVisbility = !viewModel.passwordVisbility
+                viewModel.passwordVisbility = !viewModel.passwordVisbility
             }) {
                 Icon(
                     painter = icon,
@@ -250,7 +267,12 @@ fun LoginNameField(userName: String, onUserNameChange: (String) -> Unit) {
         value = userName,
         onValueChange = onUserNameChange,
         label = { Text(text = "Användarnamn") },
-        leadingIcon = {Icon(painter = painterResource(R.drawable.ic_user), contentDescription = null)},
+        leadingIcon = {
+            Icon(
+                painter = painterResource(R.drawable.ic_user),
+                contentDescription = null
+            )
+        },
         shape = RoundedCornerShape(30)
 
     )
@@ -264,13 +286,14 @@ fun AddUserBanner(onClick: () -> Unit) {
             .width(300.dp)
             .height(100.dp)
             .clip(RoundedCornerShape(30.dp))
-            .background(MaterialTheme.colorScheme.surfaceVariant))
+            .background(MaterialTheme.colorScheme.surfaceVariant)
+    )
     {
         Text(
             text = "Inte en Chatify användare än?\nKlicka här för att skapa ett konto",
             Modifier
                 .align(Alignment.Center)
-                .clickable { onClick()},
+                .clickable { onClick() },
             textDecoration = TextDecoration.Underline,
             style = MaterialTheme.typography.bodyLarge
         )
@@ -280,13 +303,12 @@ fun AddUserBanner(onClick: () -> Unit) {
 }
 
 
-
 @Preview(showBackground = true, showSystemUi = true, device = "id:pixel_8")
 @Composable
 fun LoginScreenPreview() {
 
     ChattlyAppTheme {
-      // LoginScreen()
+        // LoginScreen()
     }
 }
 
