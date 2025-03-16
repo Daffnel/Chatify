@@ -8,6 +8,7 @@ import com.example.chattlyapp.data.UserInfoFromContacts
 import com.example.chattlyapp.data.UserProfile
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
+import java.util.UUID
 
 class Reprository(private val firebasemanger: FirebaseManger) {
 
@@ -35,8 +36,13 @@ class Reprository(private val firebasemanger: FirebaseManger) {
 
     //Sparar användarens profil
     fun saveUserProfile(userProfile: UserProfile) {
+
+        val userId = UUID.randomUUID().toString()    // Eftersom vi skapar profilen och user samtidt fr vi hitta på ett  eget userId+
+
+        userProfile.userID = userId
+
         db.collection("users")
-            .document()
+            .document(userId)
             .set(userProfile)
             .addOnSuccessListener {
                 Log.d("!!!", "ny profil skapad")

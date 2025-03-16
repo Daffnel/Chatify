@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.chattlyapp.screens.ChatScreen
+
 import com.example.chattlyapp.screens.ContactScreen
 import com.example.chattlyapp.screens.Homescreen
 import com.example.chattlyapp.screens.LoginScreen
