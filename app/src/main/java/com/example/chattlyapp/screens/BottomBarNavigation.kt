@@ -1,5 +1,11 @@
 package com.example.chattlyapp.screens
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -9,35 +15,57 @@ import androidx.compose.runtime.getValue
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.chattlyapp.data.NavBarItems
+import com.example.chattlyapp.navigation.Routes
+import com.example.chattlyapp.viewmodel.FirebaseManger
 
 @Composable
-fun BottomBarNavigation(navController: NavController){
+fun BottomBarNavigation(navController: NavController) {
+
+
 
     NavigationBar {
         val backStackEntry by navController.currentBackStackEntryAsState()              //Håller koll på hur vi har navigerat
         val currentRoute = backStackEntry?.destination?.route
 
-       NavBarItems.BarItems.forEach{ navItem ->
-           NavigationBarItem(
-               selected = currentRoute == navItem.route,
-               onClick = {
-                   navController.navigate(navItem.route){
-                       popUpTo(navController.graph.findStartDestination().id){
-                           saveState = true
-                       }
-                   launchSingleTop = true
-                       restoreState = true
-                   }
-               },
-               icon = {
-                   Icon(imageVector = navItem.Image, contentDescription = navItem.title)
-               },
-               label = {
-                   Text(text = navItem.title)
-               },
-           )
-       }
+      NavigationBarItem(
+          selected = currentRoute == Routes.HomeScreen.route,
+          onClick = { navController.navigate(Routes.HomeScreen.route)},
+          icon = { Icon(imageVector = Icons.Default.Home, contentDescription = "home") },
+          label = {
+              Text("Hem")
+          })
+
+        NavigationBarItem(
+            selected = currentRoute == Routes.ContactsScreen.route,
+            onClick = { navController.navigate(Routes.ContactsScreen.route)},
+            icon = { Icon(imageVector = Icons.Default.Person, contentDescription = "home") },
+            label = {
+                Text("Kontakter")
+            })
+        NavigationBarItem(
+            selected = currentRoute == Routes.ChatScreen.route,
+            onClick = { navController.navigate(Routes.ChatScreen.route)},
+            icon = { Icon(imageVector = Icons.Default.Phone, contentDescription = "home") },
+            label = {
+                Text("Chat")
+            })
+        NavigationBarItem(
+            selected = currentRoute == Routes.UserProfileScreen.route,
+            onClick = { navController.navigate(Routes.UserProfileScreen.route + "/false")},  //false tar bort new user fälten
+            icon = { Icon(imageVector = Icons.Default.Settings, contentDescription = "home") },
+            label = {
+                Text("Profile")
+            })
+        NavigationBarItem(
+            selected = currentRoute == Routes.LogOut.route,
+            onClick = {
+                navController.navigate(Routes.LoginScreen.route)},
+            icon = { Icon(imageVector = Icons.Default.Close, contentDescription = "Logga ut") },
+            label = {
+                Text("Logga ut")
+            })
+
 
     }
 }
+

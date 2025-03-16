@@ -34,7 +34,7 @@ import com.example.chattlyapp.data.Contacts
 import com.example.chattlyapp.viewmodel.ContactsScreenViewModel
 
 @Composable
-fun ContactScreen(modifier: Modifier = Modifier,navController: NavController){
+fun ContactScreen(){
 
 
    Column(modifier = Modifier
@@ -84,33 +84,30 @@ fun ContactList(modifier: Modifier = Modifier, viewModel: ContactsScreenViewMode
 fun ContactsListCard(contacts: Contacts){
 
     Card(colors = CardDefaults.cardColors(
-        containerColor = MaterialTheme.colorScheme.background),
+        containerColor = MaterialTheme.colorScheme.surfaceContainer),
         modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp))
     {
-        Row() {
-            Column(modifier = Modifier.padding(16.dp)) {
+        Row(){
+            Column (modifier = Modifier.padding(16.dp)) {
 
                     Text(
                         text = contacts.firstName,
-                        fontWeight = FontWeight.Bold
-                    )
-
+                        fontWeight = FontWeight.Bold)
+                
                     Text(text = contacts.eMail)
                 }
 
             }
-            Icon(
-                painter = painterResource(android.R.drawable.btn_star_big_on),
-                contentDescription = null,
-            )
+
         }
 
 }
 
 
+/*
 @Preview
 @Composable
 fun Preview(){
@@ -120,4 +117,4 @@ fun Preview(){
    // ContactsListCard()
     ContactScreen(navController = navController)
 
-}
+}*/

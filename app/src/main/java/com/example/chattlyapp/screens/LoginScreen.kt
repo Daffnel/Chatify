@@ -1,5 +1,7 @@
 package com.example.chattlyapp.screens
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -43,21 +45,31 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.chattlyapp.ChattlyAppTheme
 import com.example.chattlyapp.R
 import com.example.chattlyapp.navigation.Routes
 import com.example.chattlyapp.viewmodel.LoginScreenViewModel
 import com.example.chattlyapp.viewmodel.LoginScreenViewModelFactory
+import com.example.chattlyapp.navigation.NavigationHost
 
 
 @Composable
-fun LoginScreen(factory: LoginScreenViewModelFactory,
-                navController: NavController ,
+fun LoginScreen(navController: NavController,
+                factory: LoginScreenViewModelFactory,
                 modifier: Modifier = Modifier,
                 viewModel: LoginScreenViewModel = viewModel(factory = factory)) {
 
+    //logga ut ev. tidigare inlogg
+   viewModel.loggOut()
+
+    Log.d("!!!", viewModel.isUserLoggedIn().toString())
+
    var userName by viewModel.userName
    var password by viewModel.password
+
+
+
 
     Column(
         Modifier
@@ -126,8 +138,13 @@ fun LoginScreen(factory: LoginScreenViewModelFactory,
 
                ElevatedButton(
                     onClick = {
-
-                     viewModel.login()
+                     if(!viewModel.isUserLoggedIn()) {              //Todo något är knass undersök
+                         Log.d("!!!","Inlogg ok ska skickas vidare")
+                         navController.navigate(Routes.HomeScreen.route){
+                         }
+                     }else {
+                         Toast.makeText(context,"Inloggning misslyckades, försök igen",Toast.LENGTH_SHORT).show()
+                     }
                     },
                     Modifier.fillMaxWidth())
                 {

@@ -7,18 +7,22 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.chattlyapp.navigation.NavigationHost
 import com.example.chattlyapp.navigation.Routes
-import com.example.chattlyapp.screens.ChatScreen
-import com.example.chattlyapp.screens.ContactScreen
-import com.example.chattlyapp.screens.Homescreen
-import com.example.chattlyapp.screens.LoginScreen
-import com.example.chattlyapp.screens.UserProfileScreen
+import com.example.chattlyapp.screens.BottomBarNavigation
 import com.example.chattlyapp.viewmodel.Reprository
 import com.example.chattlyapp.viewmodel.FirebaseManger
 import com.example.chattlyapp.viewmodel.LoginScreenViewModelFactory
@@ -59,6 +63,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
     //Ordna med tillstånd att få läsa telefonboken
     fun setupPremissions() {
 
@@ -77,45 +82,41 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    @Composable             //Sköter navigationen
-    fun MainScreen() {
+    @Composable
+    fun MainScreen(modifier: Modifier = Modifier) {
         val navController = rememberNavController()
 
-        //ok. vi får lura LoginScreen på en factory :-)
-        val factoryLoginScreen: LoginScreenViewModelFactory =
-            LoginScreenViewModelFactory(Reprository(firebasemanger = FirebaseManger()))
+        Scaffold(
+            bottomBar = {
+                if (shouldShowBottomBar(navController)) {  // Göm BottomBar vid vissa skärmar
+                    BottomBarNavigation(navController)
+                }
 
-        val factoryUserProfileScreen: UserProfileScreenViewModelFactory =
-            UserProfileScreenViewModelFactory(Reprository(firebasemanger = FirebaseManger()))
 
-        NavHost(
-            navController = navController,
-            startDestination = Routes.LoginScreen.route
-        ) { //Todo ändra till rätt dest.
-
-            composable(Routes.LoginScreen.route) {
-                LoginScreen(factory = factoryLoginScreen, navController = navController)
             }
-
-            composable(Routes.ChatScreen.route) {
-                ChatScreen(navController = navController)
-            }
-
-            composable(Routes.ContactsScreen.route) {
-                ContactScreen(navController = navController)
-            }
-
-            composable(Routes.UserProfileScreen.route + "/{regNewUser}"){ backStackEntry ->                  //Allt detta för att skicka med argument till UserProfileScreen för att inkludera fält för att reg ny användare
-                val regNewUser = backStackEntry.arguments?.getString("regNewUser")?.toBoolean() ?: false
-
-                    UserProfileScreen(navController = navController, showRegScreen = regNewUser, factory = factoryUserProfileScreen)
-            }
-
-            composable(Routes.HomeScreen.route) {
-                Homescreen(navController = navController)
+        ) { innerPadding ->
+            Box(modifier = Modifier.fillMaxSize().
+            padding(innerPadding)) {
+                NavigationHost(navController)
             }
         }
-    }
 
+
+    }
+//ta bort  bottomnavbar från loginskärmen samt profile skärmen om man ska skapa en ny användare
+    @Composable
+    fun shouldShowBottomBar(navController: NavController): Boolean {
+        val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+        val backStackEntry = navController.currentBackStackEntryAsState().value
+
+    // Hämtar argument ifrån backstack om regNewUser = true ska baren gömas
+        val regNewUser = backStackEntry?.arguments?.getString("regNewUser")?.toBoolean() ?: false
+    //Om vi är på På ProfileScreen och regNewUser = true göm BottomNavBar
+    if(currentRoute?.startsWith(Routes.UserProfileScreen.route) == true && regNewUser) {
+        return false
+    }else {
+    return currentRoute != Routes.LoginScreen.route && currentRoute != Routes.LoginScreen.route
+        }
+    }
 }
 

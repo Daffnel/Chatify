@@ -20,18 +20,22 @@ class FirebaseManger {
 
 
     //Logga in en användare
-    fun loginUser(userName: String, password: String){
+    fun loginUser(userName: String, password: String): Boolean{
 
+        var status: Boolean = true
 
         auth.signInWithEmailAndPassword(userName,password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                Log.d("!!!", "användare inloggad")
+                status = true
+                Log.d("!!!", "${status} användare inloggad")
             }
         }.addOnFailureListener { e ->
                  Log.e("!!!","inlogging misslyckades",e)
-
+        status = false
+            Log.d("!!!","Kärd det här nere??")
         }
-
+        Log.d("!!!","Firebasemanger $status")
+        return status
     }
 
     fun addNewUser(userName: String, password: String){
@@ -45,7 +49,11 @@ class FirebaseManger {
         }
     }
 
-    fun logoutUser(){
+    fun isUserLoggedIn(): Boolean{
+        return FirebaseAuth.getInstance().currentUser != null
+    }
+
+    public fun logoutUser(){
 
         Firebase.auth.signOut()
     }
