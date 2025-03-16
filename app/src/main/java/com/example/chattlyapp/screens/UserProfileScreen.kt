@@ -103,7 +103,7 @@ fun UserProfileScreen(
                addUserButtonClick = {
                     viewModel.addNewUser()
                     viewModel.saveUserProfile()
-                    navController.navigate(Routes.HomeScreen.route)
+                    navController.navigate(Routes.HomeScreen.route )
                                     },
                addUserCancel = {navController.navigate(Routes.LoginScreen.route)})    // Avbryt och återgå till login skärmen
 

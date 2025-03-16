@@ -13,6 +13,7 @@ import com.example.chattlyapp.screens.Homescreen
 import com.example.chattlyapp.screens.LoginScreen
 import com.example.chattlyapp.screens.UserProfileScreen
 import com.example.chattlyapp.viewmodel.ContactsScreenViewModel
+import com.example.chattlyapp.viewmodel.ContactsScreenViewModelFactory
 import com.example.chattlyapp.viewmodel.FirebaseManger
 import com.example.chattlyapp.viewmodel.LoginScreenViewModelFactory
 import com.example.chattlyapp.viewmodel.Reprository
@@ -25,8 +26,9 @@ fun NavigationHost(navController: NavHostController){
 
     val factoryLoginScreen = remember { LoginScreenViewModelFactory(Reprository(firebaseManager)) }
     val factoryUserProfileScreen = remember { UserProfileScreenViewModelFactory(Reprository(firebaseManager)) }
+    val factoryContactsScreen = remember {ContactsScreenViewModelFactory(Reprository(firebaseManager))}
 
-    val contactsViewModel: ContactsScreenViewModel = viewModel()   //bäst att skicka viewmodels redan här för att undvika upprepning
+    val contactsViewModel: ContactsScreenViewModel = viewModel(factory = factoryContactsScreen)   //bäst att skicka viewmodels redan här för att undvika upprepning
 
 
     NavHost(
