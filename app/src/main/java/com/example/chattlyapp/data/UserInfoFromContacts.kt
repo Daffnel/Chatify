@@ -5,6 +5,7 @@ data class UserInfoFromContacts(
     val lastName: String = "",
     val email: String = "",
     val nickName: String = "",
+    val userID: String = "",
     val isUser: Boolean = false
 ) {
 

@@ -2,7 +2,6 @@ package com.example.chattlyapp.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
@@ -15,15 +14,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.chattlyapp.data.ChatData
-import com.example.chattlyapp.data.ChatMockUpData
-import com.example.chattlyapp.navigation.Routes
+import androidx.navigation.NavController
 import com.example.chattlyapp.viewmodel.ChatScreenViewModel
-
 
 
 /* val chatList = ChatMockUpData.dummyChat
@@ -36,9 +29,13 @@ import com.example.chattlyapp.viewmodel.ChatScreenViewModel
 
 
 @Composable
-fun ChatScreen(viewModel: ChatScreenViewModel,modifier: Modifier = Modifier){
+fun ChatScreen(viewModel: ChatScreenViewModel,
+               modifier: Modifier = Modifier,
+               userId: String,
+               username: String,
+               navController: NavController){
 
-    val chatList = ChatMockUpData.dummyChat
+
 
     val chatMessages = listOf(
         "Hej! Hur mår du?" to false,
@@ -47,7 +44,7 @@ fun ChatScreen(viewModel: ChatScreenViewModel,modifier: Modifier = Modifier){
         "Pluggar Jetpack Compose 😃" to true
     )
 
-    //ChatScreen(messages = chatMessages)
+    Text("Chat med Username")
 
     LazyColumn {
         items(chatMessages) {(message, isSender)->
@@ -66,21 +63,6 @@ fun SendMessage(modifier: Modifier = Modifier){
 
 }
 
-@Composable
-fun ChatListItem(chat: ChatData) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-    ) {
-        Row(modifier = Modifier.padding(16.dp)) {
-            Text(chat.chatId ?: "Privat chatt")
-            Spacer(modifier = Modifier.weight(1f))
-            Text(chat.lastMessage, fontSize = 12.sp)
-        }
-    }
-}
 @Composable
 fun ChatBubble(messages: String, isSender: Boolean) {
     Row(
