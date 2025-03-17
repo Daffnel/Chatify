@@ -76,20 +76,22 @@ class ContactsScreenViewModel(private val repo: Reprository): ViewModel() {
 
         cursor?.close()
 
-        /* Marker alla användare som matchar isUser = True */
-        Log.d("!!!", "Kontaktlista: $contactList")
-        Log.d("!!!", "FirebaseUsers: ${firebaseUsers.value}")
+        /* Marker alla användare som matchar med email och sätter isUser = True */
         return contactList.map{contact ->
             UserInfoFromContacts(
                 firstName = contact.firstName,
                 lastName = contact.lastName,
                 email = contact.email,
-                nickName = contact.nickName,
-                isUser = firebaseUsers.value.any(){it.email == contact.email} // isUser sätts till true eller false här
+                nickName = firebaseUsers.value.find{it.email == contact.email}?.nickName ?: "",
+                isUser = firebaseUsers.value.any(){it.email == contact.email}, // isUser sätts till true eller false här
+                userID = firebaseUsers.value.find { it.email == contact.email }?.userID ?: "Saknar Id"  //Krångligt men funkar
             )
+
         }
 
 
     }
+
+
 
 }

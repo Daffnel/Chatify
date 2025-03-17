@@ -1,5 +1,6 @@
 package com.example.chattlyapp.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -23,6 +24,7 @@ import com.example.chattlyapp.viewmodel.LoginScreenViewModelFactory
 import com.example.chattlyapp.viewmodel.Reprository
 import com.example.chattlyapp.viewmodel.UserProfileScreenViewModelFactory
 
+
 @Composable             //Sköter navigationen
 fun NavigationHost(navController: NavHostController){
 
@@ -45,12 +47,20 @@ fun NavigationHost(navController: NavHostController){
             LoginScreen(factory = factoryLoginScreen, navController = navController)
         }
 
-        composable(Routes.ChatScreen.route) {
-            ChatScreen(chatScreenViewModel)
-        }
+        composable(Routes.ChatScreen.route + "/{userID}" + "/{showName}"){ backStackEntry -> //skicka med användaren id som man vill chatta med
+            val userId = backStackEntry.arguments?.getString("userId") ?: "Inget Id "
+            val showName = backStackEntry.arguments?.getString("showName") ?: "Inget användarenamn"
+
+              ChatScreen(
+                  viewModel = chatScreenViewModel,
+                  userId = userId,
+                  navController = navController,
+                  username = showName
+              )
+          }
 
         composable(Routes.ContactsScreen.route) {
-            ContactScreen(contactsViewModel)
+            ContactScreen(viewModel = contactsViewModel, navController= navController)
         }
 
         composable(Routes.UserProfileScreen.route + "/{regNewUser}") { backStackEntry ->                  //Allt detta för att skicka med argument till UserProfileScreen för att inkludera fält för att reg ny användare

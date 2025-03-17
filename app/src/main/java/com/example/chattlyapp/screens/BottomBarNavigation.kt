@@ -44,7 +44,7 @@ fun BottomBarNavigation(navController: NavController) {
             })
         NavigationBarItem(
             selected = currentRoute == Routes.ChatScreen.route,
-            onClick = { navController.navigate(Routes.ChatScreen.route)},
+            onClick = { navController.navigate(Routes.ChatScreen.route + "/Inget ID" + "/vad som helst")},
             icon = { Icon(imageVector = Icons.Default.Phone, contentDescription = "home") },
             label = {
                 Text("Chat")

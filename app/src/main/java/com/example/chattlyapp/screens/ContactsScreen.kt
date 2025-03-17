@@ -32,21 +32,23 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.chattlyapp.data.UserInfoFromContacts
+import com.example.chattlyapp.navigation.Routes
 import com.example.chattlyapp.viewmodel.ContactsScreenViewModel
 
 @Composable
-fun ContactScreen(viewModel: ContactsScreenViewModel){
+fun ContactScreen(navController: NavController,viewModel: ContactsScreenViewModel){
 
 
    Column(modifier = Modifier
        .padding(top = 36.dp)) {
 
        HeaderText()
-       ContactList(viewModel = viewModel)
+       ContactList(navController = navController,viewModel = viewModel)
    }
 
-    Log.d("!!!","${viewModel.getContact(LocalContext.current)} ")
+    Log.d("!!!"," är det denna ${viewModel.getContact(LocalContext.current)} ")
 }
 
 @Composable
@@ -61,7 +63,7 @@ fun HeaderText(modifier: Modifier = Modifier) {
 
 
 @Composable
-fun ContactList(modifier: Modifier = Modifier,
+fun ContactList(navController: NavController, modifier: Modifier = Modifier,
                 viewModel: ContactsScreenViewModel){
 
     val context = LocalContext.current
@@ -69,7 +71,7 @@ fun ContactList(modifier: Modifier = Modifier,
 
     LazyColumn(modifier) {
         items(contactsList) { contact ->
-            ContactsListCard(contacts = contact)
+            ContactsListCard(navController = navController, contacts = contact)
         }
     }
 
@@ -78,14 +80,25 @@ fun ContactList(modifier: Modifier = Modifier,
 
 
 @Composable
-fun ContactsListCard(modifier: Modifier = Modifier,contacts: UserInfoFromContacts){
+fun ContactsListCard(navController: NavController, modifier: Modifier = Modifier,contacts: UserInfoFromContacts){
+
+    var userId = contacts.userID
+    var showName = contacts.nickName.ifEmpty { contacts.firstName }
+
+
+
     Card(
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFFCCE3F5)),
         modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .clickable {       },
+            .clickable {
+                if(contacts.isUser){    //starta en chat endast personen är användare skicka med ett ID och nickname eller name
+                navController.navigate(Routes.ChatScreen.route + "/$userId" + "/$showName")
+                }
+                /* Gör inget personen är inte användare */
+            },
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)){
         Row(verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(16.dp)) {
@@ -100,7 +113,7 @@ fun ContactsListCard(modifier: Modifier = Modifier,contacts: UserInfoFromContact
                 Text(text = contacts.firstName, fontWeight = FontWeight.Bold, fontSize = 18.sp)
                 Text(text = contacts.lastName, fontSize = 15.sp)
                 if(contacts.isUser){
-                    Text(text = "Jag använder chatify!!",
+                    Text(text = "Jag använder chatify!!\n Här kan du kalla mig för ${contacts.nickName}",
                         color = Color(0xD5422D03), fontSize = 13.sp,
                         fontStyle = FontStyle.Italic)
 

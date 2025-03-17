@@ -57,10 +57,13 @@ class Reprository(private val firebasemanger: FirebaseManger) {
     suspend fun fetchUser(): List<UserInfoFromContacts>{
         return try {
             val result = db.collection("users").get().await()
-            result.documents.mapNotNull { it.toObject(UserInfoFromContacts::class.java) }
+            Log.d("FireBase Data"," ${result}")
+            result.documents.mapNotNull { it.toObject(UserInfoFromContacts::class.java)
+            }
         }catch (e: Exception){
             emptyList()    //tom lista om det inte fungerar
         }
+
     }
 
 
