@@ -2,36 +2,39 @@ package com.example.chattlyapp.viewmodel
 
 import com.example.chattlyapp.data.ChatData
 import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 
 class ChatRepository() {
 
-    private val db = FirebaseFirestore.getInstance()
+    private val db = Firebase.firestore
+    private val auth = Firebase.auth
 
-    fun getOrCreateChat(user1: String, user2: String, onResult: (String) -> Unit) {
-        var chatId: String = ""
+   fun StartChatWithUser(contactEmail: String, onResult: (String)-> Unit){
+      val currentUserEmail = auth.currentUser?.email ?: return   //inte inloggad hejdå
+      val chatId = if(currentUserEmail < contactEmail) "${currentUserEmail}_${contactEmail}"
+        else "${contactEmail}_${currentUserEmail}"      //sortera email bokstavsorning så att id alltid blir lika för samma två personer  A
 
-        if (user1 < user2) {
-            chatId = "$user1-$user2"
-        } else {
-            chatId = "$user2-$user1"
-        }
+       db.collection("chats").document(chatId).get()
+           .addOnSuccessListener { document ->
+               if(!document.exists()){
+                   //Skapa nytt chat / document
+                   val chatData = hashMapOf(
+                       "chatId" to chatId,
+                       "users" to listOf(currentUserEmail,contactEmail),
+                       "lastMessage" to "",
+                       "timestamp" to System.currentTimeMillis()
+                   )
+                db.collection("chats").document(chatId).set(chatData)
+               }
+               onResult(chatId)
+           }
 
-        Firebase.firestore.collection("chats")
-            .document(chatId).get()
-            .addOnSuccessListener { document ->
-                if (!document.exists()) {   //finns inte dokumenten skapar vi de
-                    val chatData = hashMapOf(
-                        "chatId" to chatId,
-                        "users" to listOf(user1, user2),
-                        "Lastmessage" to "",
-                        "timestamp" to System.currentTimeMillis()
-                    )
-                    Firebase.firestore.collection("chats").document(chatId).set(chatData)
-                }
-            }
+
     }
+
+
 
 
 }
