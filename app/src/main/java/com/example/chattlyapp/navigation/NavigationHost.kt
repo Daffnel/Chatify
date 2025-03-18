@@ -35,7 +35,7 @@ fun NavigationHost(navController: NavHostController){
     val factoryContactsScreen = remember {ContactsScreenViewModelFactory(Reprository(firebaseManager))}
     val factoryChatScreen = remember { ChatScreenViewModelFactory(ChatRepository()) }
 
-    val contactsViewModel: ContactsScreenViewModel = viewModel(factory = factoryContactsScreen)   //bäst att skicka viewmodels redan här för att undvika upprepning
+    val contactsViewModel: ContactsScreenViewModel = viewModel(factory = factoryContactsScreen) //bäst att skicka viewmodels redan här för att undvika upprepning
     val chatScreenViewModel: ChatScreenViewModel = viewModel(factory = factoryChatScreen)
 
     NavHost(
@@ -60,7 +60,9 @@ fun NavigationHost(navController: NavHostController){
           }
 
         composable(Routes.ContactsScreen.route) {
-            ContactScreen(viewModel = contactsViewModel, navController= navController)
+            ContactScreen(viewModel = contactsViewModel,
+                        navController= navController,
+                        chatScreenViewmodel = chatScreenViewModel)
         }
 
         composable(Routes.UserProfileScreen.route + "/{regNewUser}") { backStackEntry ->                  //Allt detta för att skicka med argument till UserProfileScreen för att inkludera fält för att reg ny användare

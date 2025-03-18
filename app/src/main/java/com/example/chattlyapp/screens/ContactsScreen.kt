@@ -32,23 +32,27 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.chattlyapp.data.UserInfoFromContacts
 import com.example.chattlyapp.navigation.Routes
+import com.example.chattlyapp.viewmodel.ChatScreenViewModel
 import com.example.chattlyapp.viewmodel.ContactsScreenViewModel
 
 @Composable
-fun ContactScreen(navController: NavController,viewModel: ContactsScreenViewModel){
+fun ContactScreen(navController: NavController,
+                  viewModel: ContactsScreenViewModel,
+                  chatScreenViewmodel: ChatScreenViewModel){
 
 
    Column(modifier = Modifier
        .padding(top = 36.dp)) {
 
        HeaderText()
-       ContactList(navController = navController,viewModel = viewModel)
+       ContactList(navController = navController,viewModel = viewModel, chatScreenViewmodel = chatScreenViewmodel)
    }
 
-    Log.d("!!!"," är det denna ${viewModel.getContact(LocalContext.current)} ")
+
 }
 
 @Composable
@@ -64,14 +68,15 @@ fun HeaderText(modifier: Modifier = Modifier) {
 
 @Composable
 fun ContactList(navController: NavController, modifier: Modifier = Modifier,
-                viewModel: ContactsScreenViewModel){
+                viewModel: ContactsScreenViewModel,
+                chatScreenViewmodel: ChatScreenViewModel){
 
     val context = LocalContext.current
     val contactsList = viewModel.getContact(context)
 
     LazyColumn(modifier) {
         items(contactsList) { contact ->
-            ContactsListCard(navController = navController, contacts = contact)
+            ContactsListCard(navController = navController, contacts = contact, chatScreenViewmodel = chatScreenViewmodel)
         }
     }
 
@@ -80,7 +85,10 @@ fun ContactList(navController: NavController, modifier: Modifier = Modifier,
 
 
 @Composable
-fun ContactsListCard(navController: NavController, modifier: Modifier = Modifier,contacts: UserInfoFromContacts){
+fun ContactsListCard(navController: NavController,
+                     chatScreenViewmodel: ChatScreenViewModel,
+                     modifier: Modifier = Modifier,
+                     contacts: UserInfoFromContacts){
 
     var userId = contacts.userID
     var showName = contacts.nickName.ifEmpty { contacts.firstName }
@@ -94,7 +102,9 @@ fun ContactsListCard(navController: NavController, modifier: Modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
             .clickable {
-                if(contacts.isUser){    //starta en chat endast personen är användare skicka med ett ID och nickname eller name
+                if(contacts.isUser){
+                    chatScreenViewmodel.StartChatWithUser(contacts.email)
+                    //starta en chat endast personen är användare skicka med ett ID och nickname eller name
                 navController.navigate(Routes.ChatScreen.route + "/$userId" + "/$showName")
                 }
                 /* Gör inget personen är inte användare */

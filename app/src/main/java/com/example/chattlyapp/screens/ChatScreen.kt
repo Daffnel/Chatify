@@ -111,7 +111,7 @@ fun ChatBubble(messages: String, isSender: Boolean) {
 }
 
 
-@Preview(showBackground = true, showSystemUi = true)
+/*@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PreviewChatScreen()
 {
@@ -126,4 +126,4 @@ fun PreviewChatScreen()
         username = username,
         navController = navController
     )
-}
+}*/
