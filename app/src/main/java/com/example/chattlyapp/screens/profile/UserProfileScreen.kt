@@ -1,10 +1,9 @@
-package com.example.chattlyapp.screens
+package com.example.chattlyapp.screens.profile
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -35,10 +34,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.chattlyapp.ChattlyAppTheme
 import com.example.chattlyapp.navigation.Routes
-import com.example.chattlyapp.viewmodel.FirebaseManger
-import com.example.chattlyapp.viewmodel.Reprository
-import com.example.chattlyapp.viewmodel.UserProfileScreenViewModel
-import com.example.chattlyapp.viewmodel.UserProfileScreenViewModelFactory
+import com.example.chattlyapp.utils.FirebaseManger
+import com.example.chattlyapp.data.model.repository.Reprository
 
 @Composable
 fun UserProfileScreen(

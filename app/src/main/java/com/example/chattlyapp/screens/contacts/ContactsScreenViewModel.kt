@@ -1,12 +1,12 @@
-package com.example.chattlyapp.viewmodel
+package com.example.chattlyapp.screens.contacts
 
 import android.content.Context
 import android.database.Cursor
 import android.provider.ContactsContract
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.chattlyapp.data.UserInfoFromContacts
+import com.example.chattlyapp.data.model.UserInfoFromContacts
+import com.example.chattlyapp.data.model.repository.Reprository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

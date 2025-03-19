@@ -1,8 +1,7 @@
-package com.example.chattlyapp.viewmodel
+package com.example.chattlyapp.data.model.repository
 
-import android.os.Message
 import android.util.Log
-import com.example.chattlyapp.data.Messages
+import com.example.chattlyapp.data.model.Messages
 
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -12,7 +11,6 @@ import com.google.firebase.firestore.firestore
 
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 
 import kotlinx.coroutines.flow.channelFlow
 
@@ -34,6 +32,8 @@ class ChatRepository() {
     }
 
     fun StartChatWithUser(contactEmail: String, onResult: (String) -> Unit) {
+
+
         val currentUserEmail = auth.currentUser?.email ?: return   //inte inloggad hejdå
         val chatId = if (currentUserEmail < contactEmail) "${currentUserEmail}_${contactEmail}"
         else "${contactEmail}_${currentUserEmail}"      //sortera email bokstavsorning så att id alltid blir lika för samma två personer  A
@@ -67,7 +67,7 @@ class ChatRepository() {
 
     fun getMessages(chatId: String): Flow<List<Messages>> = channelFlow {
 
-        Log.d("!!!","ChatId i repro == ${chatId}")
+        Log.d("!!!", "ChatId i repro == ${chatId}")
         val listener = Firebase.firestore.collection("chats")
             .document(chatId)
             .collection("messages")
@@ -85,15 +85,14 @@ class ChatRepository() {
                 }
 
 
-                val messages = snapshot?.documents?.mapNotNull { it.toObject(Messages::class.java) } ?: emptyList()
-                Log.d("!!!","Meddelanden efter mappning ${messages}")
+                val messages = snapshot?.documents?.mapNotNull { it.toObject(Messages::class.java) }
+                    ?: emptyList()
+                Log.d("!!!", "Meddelanden efter mappning ${messages}")
                 launch { send(messages) } // ✅ Skickar listan med meddelanden
             }
 
         awaitClose { listener.remove() } // Stänger Firestore-lyssnaren vid cleanup
     }
-
-
 
 
 }

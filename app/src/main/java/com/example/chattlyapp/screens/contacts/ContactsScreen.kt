@@ -1,7 +1,5 @@
-package com.example.chattlyapp.screens
+package com.example.chattlyapp.screens.contacts
 
-import android.graphics.drawable.Icon
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,14 +13,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SegmentedButtonDefaults.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,17 +27,16 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.chattlyapp.data.UserInfoFromContacts
+import com.example.chattlyapp.data.model.UserInfoFromContacts
 import com.example.chattlyapp.navigation.Routes
-import com.example.chattlyapp.viewmodel.ChatScreenViewModel
-import com.example.chattlyapp.viewmodel.ContactsScreenViewModel
+import com.example.chattlyapp.screens.chat.ChatScreenViewModel
 
 @Composable
 fun ContactScreen(navController: NavController,
                   viewModel: ContactsScreenViewModel,
-                  chatScreenViewmodel: ChatScreenViewModel){
+                  chatScreenViewmodel: ChatScreenViewModel
+){
 
 
    Column(modifier = Modifier
@@ -69,7 +63,8 @@ fun HeaderText(modifier: Modifier = Modifier) {
 @Composable
 fun ContactList(navController: NavController, modifier: Modifier = Modifier,
                 viewModel: ContactsScreenViewModel,
-                chatScreenViewmodel: ChatScreenViewModel){
+                chatScreenViewmodel: ChatScreenViewModel
+){
 
     val context = LocalContext.current
     val contactsList = viewModel.getContact(context)
@@ -88,9 +83,9 @@ fun ContactList(navController: NavController, modifier: Modifier = Modifier,
 fun ContactsListCard(navController: NavController,
                      chatScreenViewmodel: ChatScreenViewModel,
                      modifier: Modifier = Modifier,
-                     contacts: UserInfoFromContacts){
+                     contacts: UserInfoFromContacts
+){
 
-    var userId = contacts.userID
     var showName = contacts.nickName.ifEmpty { contacts.firstName }
 
 
@@ -104,10 +99,8 @@ fun ContactsListCard(navController: NavController,
             .clickable {
                 if(contacts.isUser){
                     chatScreenViewmodel.StartChatWithUser(contacts.email)
-                   val chatId = chatScreenViewmodel.setChatid(contacts.email)
-                    Log.d("!!!","chat id = ${chatId}")
-
-                navController.navigate(Routes.ChatScreen.route + "/$chatId" + "/$showName")
+                    val chatId = chatScreenViewmodel.setChatid(contacts.email)
+                    navController.navigate(Routes.ChatScreen.route + "/$chatId" + "/$showName")
                 }
                 /* Gör inget personen är inte användare */
             },

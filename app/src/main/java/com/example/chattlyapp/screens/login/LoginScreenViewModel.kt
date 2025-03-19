@@ -1,14 +1,11 @@
-package com.example.chattlyapp.viewmodel
+package com.example.chattlyapp.screens.login
 
-import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
-import com.google.protobuf.Internal.BooleanList
+import com.example.chattlyapp.data.model.repository.Reprository
 
 
 class LoginScreenViewModel(private val repro: Reprository) : ViewModel() {

@@ -4,7 +4,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -13,10 +12,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.chattlyapp.navigation.Routes
-import com.example.chattlyapp.viewmodel.FirebaseManger
 
 @Composable
 fun BottomBarNavigation(navController: NavController) {
@@ -42,13 +39,13 @@ fun BottomBarNavigation(navController: NavController) {
             label = {
                 Text("Kontakter")
             })
-        NavigationBarItem(
+        /*NavigationBarItem(
             selected = currentRoute == Routes.ChatScreen.route,
             onClick = { navController.navigate(Routes.ChatScreen.route + "/Inget ID" + "/vad som helst")},
             icon = { Icon(imageVector = Icons.Default.Phone, contentDescription = "home") },
             label = {
                 Text("Chat")
-            })
+            })*/
         NavigationBarItem(
             selected = currentRoute == Routes.UserProfileScreen.route,
             onClick = { navController.navigate(Routes.UserProfileScreen.route + "/false")},  //false tar bort new user fälten

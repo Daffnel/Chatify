@@ -1,4 +1,4 @@
-package com.example.chattlyapp.data
+package com.example.chattlyapp.data.model
 
 data class UserInfoFromContacts(
     val firstName: String = "",

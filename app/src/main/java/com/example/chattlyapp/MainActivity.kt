@@ -12,21 +12,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.chattlyapp.navigation.NavigationHost
 import com.example.chattlyapp.navigation.Routes
 import com.example.chattlyapp.screens.BottomBarNavigation
-import com.example.chattlyapp.viewmodel.Reprository
-import com.example.chattlyapp.viewmodel.FirebaseManger
-
-import com.example.chattlyapp.viewmodel.UserProfileScreenViewModelFactory
 
 
 class MainActivity : ComponentActivity() {
