@@ -23,7 +23,7 @@ class ChatRepository() {
     private val auth = Firebase.auth
 
     fun setChatId(contactEmail: String): String {
-        val currentUserEmail = "daniel@daniel.se" //auth.currentUser?.email ?: " "//return   //inte inloggad hejdå
+        val currentUserEmail = auth.currentUser?.email ?: "Inte inloggad"
         val chatId = if (currentUserEmail < contactEmail) "${currentUserEmail}_${contactEmail}"
         else "${contactEmail}_${currentUserEmail}"      //sortera email bokstavsorning så at
 
