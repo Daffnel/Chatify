@@ -89,4 +89,10 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
 
+        implementation(libs.kotlinx.coroutines.core)
+        implementation(libs.kotlinx.coroutines.play.services)
+
+
+
+
 }
