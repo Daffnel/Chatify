@@ -1,8 +1,5 @@
 package com.example.chattlyapp.data.model.repository
-
-import android.util.Log
 import com.example.chattlyapp.data.model.ChatData
-import com.example.chattlyapp.data.model.Messages
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.Query
@@ -10,8 +7,7 @@ import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
+
 
 class HomeScreenRepository {
     private val db = Firebase.firestore

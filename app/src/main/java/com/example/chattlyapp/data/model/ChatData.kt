@@ -9,7 +9,6 @@ data class ChatData (
     val message: String = "",
     val text: String = ""
 ){
-constructor(): this("", emptyList(),"","",0,"","")
 
 
 

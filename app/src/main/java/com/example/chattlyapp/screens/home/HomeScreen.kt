@@ -1,7 +1,6 @@
 package com.example.chattlyapp.screens.home
 
 import android.util.Log
-import android.widget.AdapterView.OnItemClickListener
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -32,17 +31,14 @@ import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Homescreen(modifier: Modifier = Modifier.fillMaxSize(),
+fun Homescreen(modifier : Modifier = Modifier.fillMaxSize(),
                viewModel: HomeScreenViewModel,
-               navController: NavController,
-               chatScreenViewModel: ChatScreenViewModel) {
+               navController: NavController){
 
     val recentChats by viewModel.latestMessages().collectAsState(initial = emptyList())
-    var chatId: String = ""
 
-    Log.d("!!!",recentChats.toString())
 
-    var onListItemClick = { chatId: String ->
+    val onListItemClick = { chatId: String ->
 
             Log.d("!!!", "Navigating to chat: ${chatId} with user: ${chatId}")
 

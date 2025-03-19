@@ -87,7 +87,7 @@ fun ContactsListCard(navController: NavController,
                      contacts: UserInfoFromContacts
 ){
 
-    var showName = contacts.nickName.ifEmpty { contacts.firstName }
+    val  showName = contacts.nickName.ifEmpty { contacts.firstName }
 
 
 
