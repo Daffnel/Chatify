@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -19,6 +21,8 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -28,6 +32,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.chattlyapp.data.model.Messages
@@ -44,7 +52,7 @@ fun ChatScreen(
     var messageText by remember { mutableStateOf("") }
     val messagesTemp by viewModel.getMessages(chatId).collectAsState(initial = emptyList())
 
-
+    var sender: Boolean = false
 
     Column(
         modifier = Modifier
@@ -59,8 +67,8 @@ fun ChatScreen(
         HorizontalDivider(thickness = 3.dp, color = Color.Black)
 
         LazyColumn {
-            items(messagesTemp) { medddelande ->
-                ChatBubble(medddelande)
+            items(messagesTemp) { meddelande ->
+                ChatBubble(meddelande,sender)
             }
         }
         Spacer(modifier = Modifier.weight(1F))   //skicar ner mot botten
@@ -76,10 +84,17 @@ fun ChatScreen(
             OutlinedTextField(
                 value = messageText,
                 onValueChange = { messageText = it },
-                label = { Text("Skriv dit meddlande här") },
+                label = { Text("Skriv ditt meddelande här") },
                 modifier = Modifier
                     .padding(end = 8.dp)
+                    .width(220.dp)
+                    .height(56.dp),
+                    singleLine = true,
+                textStyle = TextStyle(textAlign = TextAlign.Center, fontSize = 16.sp),
             )
+
+
+
             Button(
                 onClick = {
                     viewModel.senMessages(chatId, messageText)
@@ -90,20 +105,20 @@ fun ChatScreen(
                     .height(50.dp),
                 shape = RoundedCornerShape(12.dp)
             ) {
-                Text(text = "Skicka!")
+                Text(text = "Skicka!",
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.width(80.dp),
+                    textAlign = TextAlign.Center)
             }
         }
     }
 }
 
 @Composable
-fun ChatBubble(message: Messages) {// isSender: Boolean) {
-
-    //fixa så att bubblorna byter plats
-    val personOne = message.senderId
-
-
-    var isSender: Boolean = true
+fun ChatBubble(message: Messages, isSender: Boolean) {
+    //var isSender: Boolean = true
 
     Row(
         modifier = Modifier

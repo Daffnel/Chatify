@@ -79,8 +79,7 @@ fun NavigationHost(navController: NavHostController){
 
         composable(Routes.HomeScreen.route) {
             Homescreen(viewModel = HomeScreenViewModel,
-                navController = navController,
-                chatScreenViewModel = chatScreenViewModel)
+                navController = navController)
         }
 
         composable(Routes.LogOut.route){
