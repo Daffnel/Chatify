@@ -47,13 +47,13 @@ fun NavigationHost(navController: NavHostController){
             LoginScreen(factory = factoryLoginScreen, navController = navController)
         }
 
-        composable(Routes.ChatScreen.route + "/{userID}" + "/{showName}"){ backStackEntry -> //skicka med användaren id som man vill chatta med
-            val userId = backStackEntry.arguments?.getString("userId") ?: "Inget Id "
+        composable(Routes.ChatScreen.route + "/{chatId}" + "/{showName}"){ backStackEntry ->
+            val userId = backStackEntry.arguments?.getString("chatId") ?: "Inget Id "
             val showName = backStackEntry.arguments?.getString("showName") ?: "Inget användarenamn"
 
               ChatScreen(
                   viewModel = chatScreenViewModel,
-                  userId = userId,
+                  chatId = userId,
                   navController = navController,
                   username = showName
               )

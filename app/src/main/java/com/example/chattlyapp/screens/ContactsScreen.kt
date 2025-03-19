@@ -104,8 +104,10 @@ fun ContactsListCard(navController: NavController,
             .clickable {
                 if(contacts.isUser){
                     chatScreenViewmodel.StartChatWithUser(contacts.email)
-                    //starta en chat endast personen är användare skicka med ett ID och nickname eller name
-                navController.navigate(Routes.ChatScreen.route + "/$userId" + "/$showName")
+                   val chatId = chatScreenViewmodel.setChatid(contacts.email)
+                    Log.d("!!!","chat id = ${chatId}")
+
+                navController.navigate(Routes.ChatScreen.route + "/$chatId" + "/$showName")
                 }
                 /* Gör inget personen är inte användare */
             },
