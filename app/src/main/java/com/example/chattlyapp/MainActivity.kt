@@ -20,7 +20,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.chattlyapp.navigation.NavigationHost
 import com.example.chattlyapp.navigation.Routes
-import com.example.chattlyapp.screens.BottomBarNavigation
+import com.example.chattlyapp.navigation.BottomBarNavigation
 
 
 class MainActivity : ComponentActivity() {

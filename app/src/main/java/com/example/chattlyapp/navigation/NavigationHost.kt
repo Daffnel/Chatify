@@ -13,6 +13,7 @@ import com.example.chattlyapp.screens.home.Homescreen
 import com.example.chattlyapp.screens.login.LoginScreen
 import com.example.chattlyapp.screens.profile.UserProfileScreen
 import com.example.chattlyapp.data.model.repository.ChatRepository
+import com.example.chattlyapp.data.model.repository.HomeScreenRepository
 import com.example.chattlyapp.screens.chat.ChatScreenViewModel
 import com.example.chattlyapp.screens.chat.ChatScreenViewModelFactory
 import com.example.chattlyapp.screens.contacts.ContactsScreenViewModel
@@ -20,6 +21,8 @@ import com.example.chattlyapp.screens.contacts.ContactsScreenViewModelFactory
 import com.example.chattlyapp.utils.FirebaseManger
 import com.example.chattlyapp.screens.login.LoginScreenViewModelFactory
 import com.example.chattlyapp.data.model.repository.Reprository
+import com.example.chattlyapp.screens.home.HomeScreenViewModel
+import com.example.chattlyapp.screens.home.HomeScreenViewModelFactory
 import com.example.chattlyapp.screens.profile.UserProfileScreenViewModelFactory
 
 
@@ -32,9 +35,11 @@ fun NavigationHost(navController: NavHostController){
     val factoryUserProfileScreen = remember { UserProfileScreenViewModelFactory(Reprository(firebaseManager)) }
     val factoryContactsScreen = remember { ContactsScreenViewModelFactory(Reprository(firebaseManager)) }
     val factoryChatScreen = remember { ChatScreenViewModelFactory(ChatRepository()) }
+    val factorHomeScreen = remember { HomeScreenViewModelFactory(HomeScreenRepository()) }
 
     val contactsViewModel: ContactsScreenViewModel = viewModel(factory = factoryContactsScreen) //bäst att skicka viewmodels redan här för att undvika upprepning
     val chatScreenViewModel: ChatScreenViewModel = viewModel(factory = factoryChatScreen)
+    val HomeScreenViewModel: HomeScreenViewModel = viewModel(factory = factorHomeScreen)
 
     NavHost(
         navController = navController,
@@ -73,7 +78,9 @@ fun NavigationHost(navController: NavHostController){
         }
 
         composable(Routes.HomeScreen.route) {
-            Homescreen()
+            Homescreen(viewModel = HomeScreenViewModel,
+                navController = navController,
+                chatScreenViewModel = chatScreenViewModel)
         }
 
         composable(Routes.LogOut.route){

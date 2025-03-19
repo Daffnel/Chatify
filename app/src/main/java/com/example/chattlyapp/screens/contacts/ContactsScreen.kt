@@ -1,5 +1,6 @@
 package com.example.chattlyapp.screens.contacts
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -101,6 +102,10 @@ fun ContactsListCard(navController: NavController,
                     chatScreenViewmodel.StartChatWithUser(contacts.email)
                     val chatId = chatScreenViewmodel.setChatid(contacts.email)
                     navController.navigate(Routes.ChatScreen.route + "/$chatId" + "/$showName")
+
+                    Log.d("!!!","Contactscreen \n email = ${contacts.email}\n" +
+                            "chatId = $chatId")
+
                 }
                 /* Gör inget personen är inte användare */
             },

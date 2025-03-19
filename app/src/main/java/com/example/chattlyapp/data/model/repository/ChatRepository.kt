@@ -23,7 +23,7 @@ class ChatRepository() {
     private val auth = Firebase.auth
 
     fun setChatId(contactEmail: String): String {
-        val currentUserEmail = auth.currentUser?.email ?: " "//return   //inte inloggad hejdå
+        val currentUserEmail = "daniel@daniel.se" //auth.currentUser?.email ?: " "//return   //inte inloggad hejdå
         val chatId = if (currentUserEmail < contactEmail) "${currentUserEmail}_${contactEmail}"
         else "${contactEmail}_${currentUserEmail}"      //sortera email bokstavsorning så at
 
@@ -31,12 +31,12 @@ class ChatRepository() {
         return chatId
     }
 
-    fun StartChatWithUser(contactEmail: String, onResult: (String) -> Unit) {
-
-
+    fun StartChatWithUser(contactEmail: String,onResult: (String) -> Unit) {
         val currentUserEmail = auth.currentUser?.email ?: return   //inte inloggad hejdå
         val chatId = if (currentUserEmail < contactEmail) "${currentUserEmail}_${contactEmail}"
         else "${contactEmail}_${currentUserEmail}"      //sortera email bokstavsorning så att id alltid blir lika för samma två personer  A
+
+        Log.d("!!!","Startar ny / gamal chat contacEmail = $contactEmail chatId = $chatId")
 
         db.collection("chats").document(chatId).get()
             .addOnSuccessListener { document ->
@@ -53,6 +53,8 @@ class ChatRepository() {
             }
     }
 
+
+
     fun sendMessage(chatId: String, message: String) {
         val messageData = hashMapOf(
             "senderId" to Firebase.auth.currentUser?.email,
@@ -67,7 +69,7 @@ class ChatRepository() {
 
     fun getMessages(chatId: String): Flow<List<Messages>> = channelFlow {
 
-        Log.d("!!!", "ChatId i repro == ${chatId}")
+
         val listener = Firebase.firestore.collection("chats")
             .document(chatId)
             .collection("messages")
@@ -87,7 +89,7 @@ class ChatRepository() {
 
                 val messages = snapshot?.documents?.mapNotNull { it.toObject(Messages::class.java) }
                     ?: emptyList()
-                Log.d("!!!", "Meddelanden efter mappning ${messages}")
+               // Log.d("!!!", "Meddelanden efter mappning ${messages}")
                 launch { send(messages) } // ✅ Skickar listan med meddelanden
             }
 

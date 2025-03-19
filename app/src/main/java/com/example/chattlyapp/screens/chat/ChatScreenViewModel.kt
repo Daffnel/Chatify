@@ -9,8 +9,10 @@ import kotlinx.coroutines.flow.StateFlow
 
 class ChatScreenViewModel(private  val repository: ChatRepository): ViewModel() {
 
-    private val _messages = MutableStateFlow<List<Messages>>(emptyList())
-    val messages: StateFlow<List<Messages>> = _messages
+    //private val _messages = MutableStateFlow<List<Messages>>(emptyList())
+    //val messages: StateFlow<List<Messages>> = _messages
+
+
 
     fun StartChatWithUser(contactEmail: String) {
         repository.StartChatWithUser(contactEmail, { chatId -> Unit })
