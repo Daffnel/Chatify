@@ -1,4 +1,4 @@
-package com.example.chattlyapp.screens
+package com.example.chattlyapp.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.chattlyapp.navigation.Routes
 
 @Composable
 fun BottomBarNavigation(navController: NavController) {
