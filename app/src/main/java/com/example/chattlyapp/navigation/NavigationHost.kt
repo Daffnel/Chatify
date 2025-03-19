@@ -1,28 +1,26 @@
 package com.example.chattlyapp.navigation
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.chattlyapp.screens.ChatScreen
+import com.example.chattlyapp.screens.chat.ChatScreen
 
-import com.example.chattlyapp.screens.ContactScreen
-import com.example.chattlyapp.screens.Homescreen
-import com.example.chattlyapp.screens.LoginScreen
-import com.example.chattlyapp.screens.UserProfileScreen
-import com.example.chattlyapp.viewmodel.ChatRepository
-import com.example.chattlyapp.viewmodel.ChatScreenViewModel
-import com.example.chattlyapp.viewmodel.ChatScreenViewModelFactory
-import com.example.chattlyapp.viewmodel.ContactsScreenViewModel
-import com.example.chattlyapp.viewmodel.ContactsScreenViewModelFactory
-import com.example.chattlyapp.viewmodel.FirebaseManger
-import com.example.chattlyapp.viewmodel.LoginScreenViewModelFactory
-import com.example.chattlyapp.viewmodel.Reprository
-import com.example.chattlyapp.viewmodel.UserProfileScreenViewModelFactory
+import com.example.chattlyapp.screens.contacts.ContactScreen
+import com.example.chattlyapp.screens.home.Homescreen
+import com.example.chattlyapp.screens.login.LoginScreen
+import com.example.chattlyapp.screens.profile.UserProfileScreen
+import com.example.chattlyapp.data.model.repository.ChatRepository
+import com.example.chattlyapp.screens.chat.ChatScreenViewModel
+import com.example.chattlyapp.screens.chat.ChatScreenViewModelFactory
+import com.example.chattlyapp.screens.contacts.ContactsScreenViewModel
+import com.example.chattlyapp.screens.contacts.ContactsScreenViewModelFactory
+import com.example.chattlyapp.utils.FirebaseManger
+import com.example.chattlyapp.screens.login.LoginScreenViewModelFactory
+import com.example.chattlyapp.data.model.repository.Reprository
+import com.example.chattlyapp.screens.profile.UserProfileScreenViewModelFactory
 
 
 @Composable             //Sköter navigationen
@@ -32,7 +30,7 @@ fun NavigationHost(navController: NavHostController){
 
     val factoryLoginScreen = remember { LoginScreenViewModelFactory(Reprository(firebaseManager)) }
     val factoryUserProfileScreen = remember { UserProfileScreenViewModelFactory(Reprository(firebaseManager)) }
-    val factoryContactsScreen = remember {ContactsScreenViewModelFactory(Reprository(firebaseManager))}
+    val factoryContactsScreen = remember { ContactsScreenViewModelFactory(Reprository(firebaseManager)) }
     val factoryChatScreen = remember { ChatScreenViewModelFactory(ChatRepository()) }
 
     val contactsViewModel: ContactsScreenViewModel = viewModel(factory = factoryContactsScreen) //bäst att skicka viewmodels redan här för att undvika upprepning
@@ -54,8 +52,7 @@ fun NavigationHost(navController: NavHostController){
               ChatScreen(
                   viewModel = chatScreenViewModel,
                   chatId = userId,
-                  navController = navController,
-                  username = showName
+                 username = showName
               )
           }
 

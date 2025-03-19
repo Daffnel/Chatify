@@ -1,15 +1,11 @@
-package com.example.chattlyapp.viewmodel
+package com.example.chattlyapp.screens.chat
 
-import android.os.Message
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.chattlyapp.data.ChatData
-import com.example.chattlyapp.data.Messages
+import com.example.chattlyapp.data.model.Messages
+import com.example.chattlyapp.data.model.repository.ChatRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 
 class ChatScreenViewModel(private  val repository: ChatRepository): ViewModel() {
 
@@ -35,6 +31,5 @@ class ChatScreenViewModel(private  val repository: ChatRepository): ViewModel() 
 
         return repository.setChatId(userEmail)
     }
-
 
 }

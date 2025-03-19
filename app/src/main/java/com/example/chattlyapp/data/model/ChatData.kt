@@ -1,7 +1,4 @@
-package com.example.chattlyapp.data
-
-import android.os.Message
-import android.support.v4.os.ResultReceiver
+package com.example.chattlyapp.data.model
 
 class ChatData (
     val chatId: String = "" ,

@@ -1,11 +1,9 @@
-package com.example.chattlyapp.viewmodel
+package com.example.chattlyapp.data.model.repository
 
-import android.content.Context
-import android.database.Cursor
-import android.provider.ContactsContract
 import android.util.Log
-import com.example.chattlyapp.data.UserInfoFromContacts
-import com.example.chattlyapp.data.UserProfile
+import com.example.chattlyapp.data.model.UserInfoFromContacts
+import com.example.chattlyapp.data.model.UserProfile
+import com.example.chattlyapp.utils.FirebaseManger
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import java.util.UUID

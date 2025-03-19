@@ -1,12 +1,12 @@
-package com.example.chattlyapp.viewmodel
+package com.example.chattlyapp.screens.profile
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 
-import com.example.chattlyapp.data.UserProfile
+import com.example.chattlyapp.data.model.UserProfile
+import com.example.chattlyapp.data.model.repository.Reprository
 
 class UserProfileScreenViewModel(private val repro: Reprository): ViewModel()
 {
